@@ -328,5 +328,40 @@
       }
     });
   </script>
+  <script>
+  // Disable Right Click
+  document.addEventListener("contextmenu", e => e.preventDefault());
+
+  // Disable common inspect/view-source shortcuts
+  document.onkeydown = function (e) {
+    // Keys to block
+    const blockedCombos = [
+      e.key === "F12",
+      e.ctrlKey && e.shiftKey && ["I", "J", "C", "K"].includes(e.key),
+      e.ctrlKey && ["U", "S", "A"].includes(e.key),
+      e.metaKey && ["S", "A"].includes(e.key),
+      e.key === "PrintScreen"
+    ];
+
+    if (blockedCombos.some(condition => condition)) {
+      e.preventDefault();
+      return false;
+    }
+  };
+
+  // Disable Ctrl+A, Ctrl+S, Ctrl+U separately (more aggressive)
+  document.addEventListener("keydown", function (e) {
+    if (
+      (e.ctrlKey || e.metaKey) &&
+      ["a", "s", "u"].includes(e.key.toLowerCase())
+    ) {
+      e.preventDefault();
+    }
+  });
+
+  // Disable page source drag/selection
+  document.addEventListener("selectstart", e => e.preventDefault());
+  document.addEventListener("dragstart", e => e.preventDefault());
+</script>
 </body>
 </html>
