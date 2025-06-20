@@ -735,10 +735,12 @@
   </script>
   <!-- //disable right click inspect -->
   <script>
+  // Disable right-click
   document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
   });
 
+  // Disable F12, Ctrl+Shift+I/J/C, Ctrl+U
   document.onkeydown = function (e) {
     if (
       e.key === "F12" ||
@@ -749,6 +751,7 @@
     }
   };
 </script>
+
 
 </body>
 </html>
