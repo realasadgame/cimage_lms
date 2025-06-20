@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vapi AI Integration</title>
+    <style>
+        /* Fix Vapi AI Button Position */
+        [class*="vapi"], .vapi-button, #vapi-button, .vapi-sdk-button-container {
+            position: fixed !important;
+            z-index: 10000 !important;
+            bottom: 40px !important;
+            right: 40px !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Vapi AI Integration Script with Error Handling -->
+    <script>
+        var ilpzVapiInstance = null;
+        const assistant = "7c71a695-6506-4796-843a-346c77436179"; // Your Assistant ID
+        const apiKey = "d1043a72-ba87-4dcd-a7a8-4aedfb9fb3ad"; // Your Public API Key
+
+        const buttonConfig = {
+            position: "bottom-right",
+            offset: "40px",
+            width: "60px",
+            height: "60px",
+            idle: {
+                color: "#007bff",
+                type: "pill",
+                title: "Need Help?",
+                subtitle: "Talk to Sneha",
+                icon: "https://unpkg.com/lucide-static@0.321.0/icons/phone.svg"
+            },
+            loading: {
+                color: "#ffc107",
+                type: "pill",
+                title: "Connecting...",
+                subtitle: "Please wait",
+                icon: "https://unpkg.com/lucide-static@0.321.0/icons/loader.svg"
+            },
+            active: {
+                color: "#28a745",
+                type: "pill",
+                title: "Call Active",
+                subtitle: "Sneha is listening",
+                icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg"
+            }
+        };
+
+        (function (d, t) {
+            var g = d.createElement(t),
+                s = d.getElementsByTagName(t)[0];
+            g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+            g.defer = true;
+            g.async = true;
+            s.parentNode.insertBefore(g, s);
+
+            g.onload = function () {
+                try {
+                    if (!window.vapiSDK) {
+                        console.error("Vapi SDK not loaded. Please check the CDN URL or network connectivity.");
+                        alert("Failed to load Vapi AI. Please try again later.");
+                        return;
+                    }
+                    ilpzVapiInstance = window.vapiSDK.run({
+                        apiKey: apiKey,
+                        assistant: assistant,
+                        config: buttonConfig
+                    });
+                    console.log("Vapi AI initialized successfully:", ilpzVapiInstance);
+
+                    // Event listeners for debugging
+                    ilpzVapiInstance.on("call-start", () => console.log("Vapi call started"));
+                    ilpzVapiInstance.on("call-end", () => console.log("Vapi call ended"));
+                    ilpzVapiInstance.on("error", (error) => {
+                        console.error("Vapi AI error:", error);
+                        alert("Check Your Internet Connection.");
+                    });
+                } catch (error) {
+                    console.error("Error initializing Vapi AI:", error);
+                    alert("Failed to initialize Vapi AI. Please check your API key or Assistant ID.");
+                }
+            };
+            g.onerror = function () {
+                console.error("Failed to load Vapi SDK script. Check CDN URL or network.");
+                alert("Unable to load Vapi AI script. Please check your internet connection.");
+            };
+        })(document, "script");
+    </script>
+</body>
+</html>

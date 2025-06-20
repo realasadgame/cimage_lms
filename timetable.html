@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Class Timetable</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #e6f0fa 0%, #f7f9fc 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #1a2a44;
+      padding: 1rem;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .timetable-header {
+      margin-bottom: 1rem;
+    }
+
+    .timetable-header h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #1a2a44;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .timetable-meta {
+      display: flex;
+      gap: 1rem;
+      color: #4b5e7a;
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+      justify-content: center;
+    }
+
+    .timetable-nav {
+      background: #f8fafc;
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .timetable-nav button {
+      background: none;
+      border: none;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1a2a44;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .timetable-nav button:hover,
+    .timetable-nav button.active {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .timetable-container {
+      overflow-x: auto;
+      margin: 0.5rem 0;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      max-width: 100%;
+    }
+
+    .timetable {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      background: #ffffff;
+    }
+
+    .timetable th,
+    .timetable td {
+      padding: 0.6rem;
+      border: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: top;
+      transition: background-color 0.3s;
+    }
+
+    .timetable th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #1a2a44;
+    }
+
+    .timetable td {
+      position: relative;
+    }
+
+    .timetable td:hover {
+      background-color: #f1f5f9;
+    }
+
+    .class-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .class-info .subject {
+      font-weight: 500;
+      color: #1a2a44;
+      font-size: 0.75rem;
+    }
+
+    .class-info .faculty {
+      font-size: 0.65rem;
+      color: #4b5e7a;
+    }
+
+    .subject-1 { background-color: #e3f2fd; }
+    .subject-2 { background-color: #f3e5f5; }
+    .subject-3 { background-color: #e8f5e9; }
+    .subject-4 { background-color: #fff3e0; }
+    .subject-5 { background-color: #f3f4f6; }
+    .subject-6 { background-color: #fff8e1; }
+
+    .industry-syllabus {
+      position: relative;
+      padding: 0.2rem;
+    }
+
+    .industry-syllabus::before {
+      content: 'Industry Syllabus';
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4caf50;
+      color: white;
+      padding: 0 4px;
+      border-radius: 6px;
+      font-size: 0.5rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .add-on {
+      position: relative;
+      padding: 0.2rem;
+    }
+
+    .add-on::before {
+      content: 'Add-On';
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff9800;
+      color: white;
+      padding: 0 4px;
+      border-radius: 6px;
+      font-size: 0.5rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .break {
+      background-color: #f5f5f5;
+      color: #666;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .download-btn {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .download-btn:hover {
+      background: #059669;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    .back-btn {
+      padding: 0.75rem 1.5rem;
+      background: #e5e7eb;
+      color: #1a2a44;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      background: #d1d5db;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      transform: translateY(20px);
+      z-index: 2000;
+      font-size: 0.85rem;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.error {
+      background: #ef4444;
+    }
+
+    @media (max-width: 768px) {
+      .timetable th,
+      .timetable td {
+        padding: 0.4rem;
+        font-size: 0.7rem;
+      }
+      .timetable-nav {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .timetable-nav button {
+        padding: 0.2rem 0.6rem;
+        font-size: 0.8rem;
+      }
+      .timetable {
+        min-width: 800px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .timetable th,
+      .timetable td {
+        padding: 0.3rem;
+        font-size: 0.6rem;
+      }
+      .timetable-nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .timetable-nav button {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="timetable-header">
+      <h2>Class Timetable (B.Sc. IT - 3rd Year - Batch-1 & 2)</h2>
+      <div class="timetable-meta">
+        <span>Patliputra New Building - Room No. 1C</span>
+        <span>Effective from 04/06/2025</span>
+      </div>
+      <div class="timetable-nav">
+        <button class="active" onclick="showDay('all')">All Days</button>
+        <button onclick="showDay('mon')">Monday</button>
+        <button onclick="showDay('tue')">Tuesday</button>
+        <button onclick="showDay('wed')">Wednesday</button>
+        <button onclick="showDay('thu')">Thursday</button>
+        <button onclick="showDay('fri')">Friday</button>
+        <button onclick="showDay('sat')">Saturday</button>
+        <button class="download-btn" onclick="downloadTimetable()">Download</button>
+      </div>
+    </div>
+    <div class="timetable-container">
+      <table class="timetable" id="timetable">
+        <thead>
+          <tr id="timetableHeader">
+            <th>Time</th>
+            <th>Schedule</th>
+          </tr>
+        </thead>
+        <tbody id="timetableBody"></tbody>
+      </table>
+    </div>
+    <div class="buttons">
+      <button type="button" class="back-btn" onclick="window.location.href='student.html'">Back to Dashboard</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const timetableData = {
+      timeSlots: [
+        "08:00 AM - 09:00 AM",
+        "09:00 AM - 10:00 AM",
+        "10:00 AM - 10:45 AM",
+        "10:45 AM - 11:15 AM",
+        "11:15 AM - 12:00 PM",
+        "12:00 PM - 01:00 PM",
+      ],
+      schedule: {
+        mon: [
+          { time: "08:00 AM - 09:00 AM", subject: "Internet & Web Design", faculty: "Raju Upadhyay Sir", class: "subject-1" },
+          { time: "09:00 AM - 10:00 AM", subject: "Internet & Web Design", faculty: "Sanjeev Sir", class: "subject-1" },
+          { time: "10:00 AM - 10:45 AM", subject: "Java Programming", faculty: "Ravi Soni Sir", class: "subject-2" },
+          { time: "10:45 AM - 11:15 AM", subject: "BREAK", faculty: "", class: "break" },
+          { time: "11:15 AM - 12:00 PM", subject: "MCAP-MATHS (Add On)", faculty: "Rabindra Sir", class: "add-on" },
+          { time: "12:00 PM - 01:00 PM", subject: "System Analysis & Design", faculty: "Anjes Sir", class: "subject-3" },
+        ],
+        tue: [
+          { time: "08:00 AM - 09:00 AM", subject: "Internet & Web Design", faculty: "Raju Upadhyay Sir", class: "subject-1" },
+          { time: "09:00 AM - 10:00 AM", subject: "Cloud Computing", faculty: "Sanjeev Sir", class: "industry-syllabus" },
+          { time: "10:00 AM - 10:45 AM", subject: "Cloud Computing", faculty: "Murali Manohar Sir", class: "industry-syllabus" },
+          { time: "10:45 AM - 11:15 AM", subject: "BREAK", faculty: "", class: "break" },
+          { time: "11:15 AM - 12:00 PM", subject: "Visual Programming with VB", faculty: "Amit Shukla Sir", class: "subject-4" },
+          { time: "12:00 PM - 01:00 PM", subject: "PHP with MySQL", faculty: "Niraj Kumar Singh Sir", class: "industry-syllabus" },
+        ],
+        wed: [
+          { time: "08:00 AM - 09:00 AM", subject: "Internet & Web Design", faculty: "Raju Upadhyay Sir", class: "subject-1" },
+          { time: "09:00 AM - 10:00 AM", subject: "Internet & Web Design", faculty: "Sanjeev Sir", class: "subject-1" },
+          { time: "10:00 AM - 10:45 AM", subject: "Java Programming", faculty: "Ravi Soni Sir", class: "subject-2" },
+          { time: "10:45 AM - 11:15 AM", subject: "BREAK", faculty: "", class: "break" },
+          { time: "11:15 AM - 12:00 PM", subject: "MCAP-MATHS (Add On)", faculty: "Rabindra Sir", class: "add-on" },
+          { time: "12:00 PM - 01:00 PM", subject: "System Analysis & Design", faculty: "Anjes Sir", class: "subject-3" },
+        ],
+        thu: [
+          { time: "08:00 AM - 09:00 AM", subject: "Internet & Web Design", faculty: "Raju Upadhyay Sir", class: "subject-1" },
+          { time: "09:00 AM - 10:00 AM", subject: "Cloud Computing", faculty: "Sanjeev Sir", class: "industry-syllabus" },
+          { time: "10:00 AM - 10:45 AM", subject: "Cloud Computing", faculty: "Murali Manohar Sir", class: "industry-syllabus" },
+          { time: "10:45 AM - 11:15 AM", subject: "BREAK", faculty: "", class: "break" },
+          { time: "11:15 AM - 12:00 PM", subject: "Visual Programming with VB", faculty: "Amit Shukla Sir", class: "subject-4" },
+          { time: "12:00 PM - 01:00 PM", subject: "PHP with MySQL", faculty: "Niraj Kumar Singh Sir", class: "industry-syllabus" },
+        ],
+        fri: [
+          { time: "08:00 AM - 09:00 AM", subject: "Java Programming", faculty: "Ravi Soni Sir", class: "subject-2" },
+          { time: "09:00 AM - 10:00 AM", subject: "System Analysis & Design", faculty: "Anjes Sir", class: "subject-3" },
+          { time: "10:00 AM - 10:45 AM", subject: "Visual Programming with VB", faculty: "Amit Shukla Sir", class: "subject-4" },
+          { time: "10:45 AM - 11:15 AM", subject: "BREAK", faculty: "", class: "break" },
+          { time: "11:15 AM - 12:00 PM", subject: "PHP with MySQL", faculty: "Niraj Kumar Singh Sir", class: "industry-syllabus" },
+          { time: "12:00 PM - 01:00 PM", subject: "Internet & Web Design", faculty: "Raju Upadhyay Sir", class: "subject-1" },
+        ],
+        sat: [
+          { time: "08:00 AM - 09:00 AM", subject: "Cloud Computing", faculty: "Sanjeev Sir", class: "industry-syllabus" },
+          { time: "09:00 AM - 10:00 AM", subject: "MCAP-MATHS (Add On)", faculty: "Rabindra Sir", class: "add-on" },
+          { time: "10:00 AM - 10:45 AM", subject: "Java Programming", faculty: "Ravi Soni Sir", class: "subject-2" },
+          { time: "10:45 AM - 11:15 AM", subject: "BREAK", faculty: "", class: "break" },
+          { time: "11:15 AM - 12:00 PM", subject: "System Analysis & Design", faculty: "Anjes Sir", class: "subject-3" },
+          { time: "12:00 PM - 01:00 PM", subject: "Visual Programming with VB", faculty: "Amit Shukla Sir", class: "subject-4" },
+        ],
+      },
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      showDay('all');
+    });
+
+    function showDay(day) {
+      const tbody = document.getElementById("timetableBody");
+      const header = document.getElementById("timetableHeader");
+      const navButtons = document.querySelectorAll('.timetable-nav button');
+      if (!tbody || !header || !navButtons) return;
+
+      // Update active button
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      const activeButton = document.querySelector(`.timetable-nav button[onclick="showDay('${day}')"]`) || 
+                          document.querySelector(`.timetable-nav button[onclick="showDay('all')"]`);
+      if (activeButton) activeButton.classList.add('active');
+
+      tbody.innerHTML = "";
+      header.innerHTML = "";
+
+      if (day === 'all') {
+        // All Days view: Time slots as rows, days as columns
+        header.innerHTML = `
+          <th>Time</th>
+          <th>Monday</th>
+          <th>Tuesday</th>
+          <th>Wednesday</th>
+          <th>Thursday</th>
+          <th>Friday</th>
+          <th>Saturday</th>
+        `;
+
+        timetableData.timeSlots.forEach((timeSlot) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `<th>${timeSlot}</th>`;
+
+          ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'].forEach(dayKey => {
+            const classData = timetableData.schedule[dayKey].find(c => c.time === timeSlot);
+            const td = document.createElement("td");
+            td.className = classData ? classData.class : "subject-5";
+            if (classData && classData.subject === "BREAK") {
+              td.textContent = classData.subject;
+            } else if (classData) {
+              td.innerHTML = `
+                <div class="class-info">
+                  <span class="subject">${classData.subject}</span><br />
+                  <span class="faculty">${classData.faculty}</span>
+                </div>
+              `;
+            } else {
+              td.textContent = "";
+            }
+            row.appendChild(td);
+          });
+          tbody.appendChild(row);
+        });
+      } else {
+        // Single day view: Time slots and schedule in two columns
+        header.innerHTML = `
+          <th>Time</th>
+          <th>Schedule</th>
+        `;
+        const schedule = timetableData.schedule[day];
+        schedule.forEach((classData) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <th>${classData.time}</th>
+            <td class="${classData.class}">
+              ${classData.subject === "BREAK" 
+                ? classData.subject 
+                : `<div class="class-info">
+                     <span class="subject">${classData.subject}</span><br />
+                     <span class="faculty">${classData.faculty}</span>
+                   </div>`}
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+    }
+
+    function downloadTimetable() {
+      const link = document.createElement('a');
+      link.href = 'timetable.jpg';
+      link.download = 'timetable.jpg';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Timetable image downloaded successfully!");
+    }
+
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+      if (!toast) return;
+      toast.textContent = message;
+      toast.className = `toast show ${type === "error" ? "error" : ""}`;
+      setTimeout(() => {
+        toast.className = "toast";
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

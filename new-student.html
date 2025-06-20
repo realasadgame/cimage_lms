@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Student Login Request - CIMAGE College</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a3c5e 0%, #2c5282 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+      color: #333;
+    }
+
+    .request-container {
+      background: #ffffff;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      max-width: 480px;
+      width: 100%;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .request-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .request-header img {
+      width: 120px;
+      margin-bottom: 1rem;
+    }
+
+    .request-header h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #1a3c5e;
+    }
+
+    .request-header p {
+      font-size: 0.95rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #374151;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: #f9fafb;
+      color: #111827;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      outline: none;
+    }
+
+    .form-group input::placeholder {
+      color: #9ca3af;
+    }
+
+    .form-group i {
+      position: absolute;
+      left: 0.75rem;
+      top: 2.4rem;
+      color: #6b7280;
+      font-size: 1rem;
+      transition: color 0.2s ease;
+    }
+
+    .form-group input:focus + i {
+      color: #2563eb;
+    }
+
+    .form-group.error input {
+      border-color: #dc2626;
+    }
+
+    .form-group.error .error-message {
+      display: block;
+      color: #dc2626;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+
+    .error-message {
+      display: none;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 0.85rem;
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-button:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .submit-button:active {
+      transform: translateY(0);
+    }
+
+    .submit-button.loading::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .submit-button.loading span {
+      opacity: 0;
+    }
+
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #6b7280;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: #2563eb;
+    }
+
+    @media (max-width: 480px) {
+      .request-container {
+        padding: 1.5rem;
+        max-width: 95%;
+      }
+
+      .request-header img {
+        width: 100px;
+      }
+
+      .request-header h2 {
+        font-size: 1.5rem;
+      }
+
+      .request-header p {
+        font-size: 0.85rem;
+      }
+
+      .form-group input {
+        padding: 0.65rem 1rem 0.65rem 2.25rem;
+      }
+
+      .form-group i {
+        top: 2.3rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="request-container">
+    <div class="request-header">
+      <img src="cimagelogo.png" alt="CIMAGE College Logo" />
+      <h2>New Student Login Request</h2>
+      <p>Enter your Student ID to request login access. The admin will review and activate your account.</p>
+    </div>
+
+    <form id="loginRequestForm">
+      <div class="form-group">
+        <label for="studentId">Student ID</label>
+        <i class="fas fa-user"></i>
+        <input type="text" id="studentId" required placeholder="e.g., 12345" />
+        <span class="error-message">Invalid Student ID. Use a 5-digit number (e.g., 12345).</span>
+      </div>
+      <button type="submit" class="submit-button"><span>Send Request</span></button>
+    </form>
+
+    <a href="studentlogin.html" class="back-link">← Back to Login</a>
+  </div>
+
+  <script>
+    document.getElementById('loginRequestForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const studentId = document.getElementById('studentId').value.trim();
+      const studentIdGroup = document.getElementById('studentId').parentElement;
+      const submitButton = document.querySelector('.submit-button');
+
+      // Reset error state
+      studentIdGroup.classList.remove('error');
+      submitButton.classList.add('loading');
+      submitButton.disabled = true;
+
+      // Validation patterns
+      const validStudentIdPattern = /^\d{5}$/;
+      const onlyAlphabetsPattern = /^[A-Za-z]+$/;
+      const hasSpecialCharsPattern = /[^A-Za-z0-9]/;
+
+      // Check for invalid cases
+      let errorMessage = '';
+      if (!studentId) {
+        errorMessage = 'Please enter a Student ID';
+      } else if (onlyAlphabetsPattern.test(studentId)) {
+        errorMessage = 'Student ID cannot contain only letters. Use a 5-digit number (e.g., 12345)';
+      } else if (hasSpecialCharsPattern.test(studentId)) {
+        errorMessage = 'Student ID cannot contain special characters. Use a 5-digit number (e.g., 12345)';
+      } else if (!validStudentIdPattern.test(studentId)) {
+        errorMessage = 'Invalid Student ID. Use a 5-digit number (e.g., 12345)';
+      }
+
+      if (errorMessage) {
+        studentIdGroup.classList.add('error');
+        studentIdGroup.querySelector('.error-message').textContent = errorMessage;
+        alert(errorMessage);
+        submitButton.classList.remove('loading');
+        submitButton.disabled = false;
+        return;
+      }
+
+      // Simulate sending request to admin
+      try {
+        console.log(`Sending login request for Student ID: ${studentId}`);
+        setTimeout(() => {
+          alert(`Request for login access sent for ID: ${studentId}. Admin will contact you soon.`);
+          submitButton.classList.remove('loading');
+          submitButton.disabled = false;
+          document.getElementById('loginRequestForm').reset(); // Clear form
+        }, 1000); // Simulate async processing
+      } catch (err) {
+        console.error('Request submission failed:', err);
+        alert('Error submitting request. Please try again.');
+        submitButton.classList.remove('loading');
+        submitButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="CIMAGE College LMS - Learn anytime, anywhere." />
+  <title>CIMAGE College LMS</title>
+  <!-- Font Awesome 6.0.0 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Bootstrap 4 CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <!-- Magnific Popup CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      overflow-x: hidden;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f6fa;
+      color: #2c3e50;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .cimage-main-content { flex: 1; }
+    .cimage-navbar {
+      background-color: #2c3e50;
+      padding: 1rem 2rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .cimage-nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .cimage-logo {
+      color: white;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .cimage-logo h1 { font-size: 1.8rem; font-weight: 600; }
+    .cimage-logo .subtitle {
+      font-size: 0.9rem;
+      font-weight: 400;
+      opacity: 0.8;
+    }
+    .cimage-logo:hover {
+      /* Remove background, shadow, or transform effects on hover for logo */
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer;
+      opacity: 0.95;
+      /* You can add a subtle effect if desired, e.g., slight opacity */
+    }
+    .cimage-nav-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .cimage-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 16px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+    }
+    .cimage-nav-item a {
+      text-decoration: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cimage-nav-item:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    .cimage-mobile-menu {
+      display: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .cimage-nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #2c3e50;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+      }
+      .cimage-nav-links.active { display: flex; }
+      .cimage-mobile-menu { display: block; }
+    }
+    .cimage-hero {
+      width: 100%;
+      height: calc(100vh - 70px);
+      background: linear-gradient(rgba(44, 62, 80, 0.6), rgba(44, 62, 80, 0.6)),
+        url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 0 1rem;
+      position: sticky;
+      top: 70px;
+      z-index: 999;
+    }
+    .cimage-hero-content {
+      max-width: 800px;
+      background: rgba(44, 62, 80, 0.4);
+      padding: 2.5rem;
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+    }
+    .cimage-hero-title {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+    }
+    .cimage-hero-subtitle {
+      font-size: 1.3rem;
+      line-height: 1.6;
+      opacity: 0.9;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+      margin-bottom: 1.5rem;
+    }
+    .cimage-hero-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #3e4095;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .cimage-hero-button:hover {
+      background-color: #2c3e50;
+      transform: translateY(-2px);
+    }
+    /* Courses Section */
+    .courses-section {
+      padding: 80px 0;
+      background-color: #2c3e50;
+      color: white;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-title h5 {
+      font-size: 1.2rem;
+      color: white;
+      margin-bottom: 10px;
+    }
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: white;
+      font-weight: 600;
+    }
+    .courses-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+      transition: transform 0.3s ease;
+    }
+    .courses-item:hover {
+      transform: scale(1.05);
+    }
+    .courses-item .thumb img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .courses-content {
+      padding: 20px;
+    }
+    .courses-content .cat {
+      font-size: 0.9rem;
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .courses-content h3 a {
+      font-size: 1.5rem;
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .courses-content h3 a:hover {
+      color: #3e4095;
+    }
+    .courses-content p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+    .courses-content a.readmore {
+      color: #3e4095;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .courses-content a.readmore:hover {
+      color: #f5f6fa;
+    }
+    .courses-item .icon img {
+      display: none;
+    }
+    /* History Section */
+    .history-section {
+      padding: 80px 0;
+      background-color: #2c3e50;
+      color: white;
+    }
+    .history-section .section-title h3 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .history-section .step-box p {
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+    .history-section img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .history-section a {
+      color: #3e4095;
+      text-decoration: none;
+    }
+    .history-section a:hover {
+      color: #f5f6fa;
+    }
+    /* Footer Section */
+    .cimage-footer {
+      background-color: #ffffff;
+      color: #2c3e50;
+      padding: 3rem 0;
+      font-size: 0.9rem;
+    }
+    .cimage-footer .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .cimage-footer .footer-column {
+      flex: 1;
+      min-width: 200px;
+    }
+    .cimage-footer .footer-column h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #2c3e50;
+    }
+    .cimage-footer .footer-column p,
+    .cimage-footer .footer-column ul {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #2c3e50;
+    }
+    .cimage-footer .footer-column ul {
+      list-style: none;
+    }
+    .cimage-footer .footer-column ul li {
+      margin-bottom: 0.5rem;
+    }
+    .cimage-footer .footer-column ul li a {
+      color: #2c3e50;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .cimage-footer .footer-column ul li a:hover {
+      color: #3e4095;
+    }
+    .cimage-footer .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .cimage-footer .social-links a {
+      color: #2c3e50;
+      font-size: 1.5rem;
+      transition: color 0.3s ease;
+    }
+    .cimage-footer .social-links a:hover {
+      color: #3e4095;
+    }
+    .cimage-footer .copyright-wrap {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(44, 62, 80, 0.1);
+      margin-top: 2rem;
+      color: #2c3e50;
+    }
+    .cimage-footer .facebook-embed {
+      margin-top: 1rem;
+    }
+    @media (max-width: 768px) {
+      .cimage-footer .footer-container {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+        text-align: center;
+      }
+      .cimage-footer .footer-column,
+      .cimage-footer .footer-section {
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        width: 100%;
+      }
+      .cimage-footer .social-links {
+        justify-content: center;
+      }
+      .cimage-hero {
+        height: calc(100vh - 60px);
+        background-attachment: scroll;
+        top: 60px;
+      }
+      .cimage-hero-title { font-size: 2.5rem; }
+      .cimage-hero-subtitle { font-size: 1.1rem; }
+      .cimage-hero-content { padding: 2rem; }
+      .cimage-hero-button { padding: 10px 20px; }
+    }
+    /* Vapi AI Button Sticky Position */
+    [class*="vapi"], .vapi-button, #vapi-button, .vapi-sdk-button-container {
+      position: fixed !important;
+      z-index: 10000 !important;
+      bottom: 40px !important;
+      right: 40px !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="cimage-main-content">
+    <!-- Navbar -->
+    <nav class="cimage-navbar" aria-label="Main Navigation">
+      <div class="cimage-nav-container">
+        <a href="index.html" class="cimage-logo">
+          <h1>CIMAGE College</h1>
+          <span class="subtitle">Learning Management System</span>
+        </a>
+        <div class="cimage-nav-links">
+          <div class="cimage-nav-item"><a href="faculty-login.html"><i class="fas fa-chalkboard-teacher"></i> Faculty Panel</a></div>
+          <div class="cimage-nav-item"><a href="studentlogin.html"><i class="fas fa-user-graduate"></i> Student Panel</a></div>
+          <div class="cimage-nav-item"><a href="https://www.cimagecollege.com" target="_blank"><i class="fas fa-university"></i> CIMAGE Website</a></div>
+          <div class="cimage-nav-item"><a href="https://cimage.ai" target="_blank"><i class="fas fa-robot"></i> CIMAGE.AI</a></div>
+          <div class="cimage-nav-item"><a href="https://cimage.in/pre-register" target="_blank"><i class="fas fa-address-card"></i> Admission Inquiry</a></div>
+        </div>
+        <div class="cimage-mobile-menu" aria-label="Toggle Menu">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="cimage-hero">
+      <div class="cimage-hero-content">
+        <h1 class="cimage-hero-title">Empowering Minds, Anytime, Anywhere</h1>
+        <p class="cimage-hero-subtitle">Unlock your potential with CIMAGE LMS – your gateway to seamless learning, expert resources, and career success.</p>
+        <a href="https://cimage.in/pre-register" class="cimage-hero-button">Explore Courses Now</a>
+      </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="section-title">
+              <h5><i class="fas fa-graduation-cap"></i> Courses at CIMAGE Group of College</h5>
+              <h2>UG & PG Courses</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="courses-item">
+              <div class="thumb">
+                <a href="https://cimage.in/courses/best-bca-college-in-patna-1">
+                  <img src="https://cimage.in/sitepanel/uploads/course/bca.jpg" alt="BCA">
+                </a>
+              </div>
+              <div class="courses-content">
+                <div class="cat"><i class="fas fa-graduation-cap"></i> BCA</div>
+                <h3><a href="https://cimage.in/courses/best-bca-college-in-patna-1">BCA</a></h3>
+                <p>Get enrolled for the BCA course at CIMAGE as it is popularly known as Best BCA college in Patna Bihar. The BCA Course at CIMAGE includes a range of contemporary Add-On Courses aligned with industry demands, preparing students to confront global challenges in Information Technology. Secure job placements through the top BCA College in Patna, Bihar.</p>
+                <a href="https://cimage.in/courses/best-bca-college-in-patna-1" class="readmore">Read More <i class="fas fa-long-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="courses-item">
+              <div class="thumb">
+                <a href="https://cimage.in/courses/best-bba-college-in-patna-2">
+                  <img src="https://cimage.in/sitepanel/uploads/course/bba.jpg" alt="BBA">
+                </a>
+              </div>
+              <div class="courses-content">
+                <div class="cat"><i class="fas fa-graduation-cap"></i> BBA</div>
+                <h3><a href="https://cimage.in/courses/best-bba-college-in-patna-2">BBA</a></h3>
+                <p>The BBA course at CIMAGE instills students with knowledge, skills, and confidence essential for success in the dynamic business landscape. Secure admission to the top BBA college in Patna Bihar offering campus placement opportunities. Affiliated with Aryabhatta Knowledge University (UGC Recognized), CIMAGE provides top-notch education with a global perspective.</p>
+                <a href="https://cimage.in/courses/best-bba-college-in-patna-2" class="readmore">Read More <i class="fas fa-long-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="courses-item">
+              <div class="thumb">
+                <a href="https://cimage.in/courses/best-b-sc-it-college-in-patna-3">
+                  <img src="https://cimage.in/sitepanel/uploads/course/bsc-it.jpg" alt="B.Sc.-IT">
+                </a>
+              </div>
+              <div class="courses-content">
+                <div class="cat"><i class="fas fa-graduation-cap"></i> B.Sc.-IT</div>
+                <h3><a href="https://cimage.in/courses/best-b-sc-it-college-in-patna-3">B.Sc.-IT</a></h3>
+                <p>A Bachelor of Science in Information Technology is an undergraduate degree granted upon completion of a program focused on IT. It's a crucial qualification for entering the Information Technology industry. CIMAGE stands as the best BSc IT College in Patna Bihar, offering comprehensive education in this field.</p>
+                <a href="https://cimage.in/courses/best-b-sc-it-college-in-patna-3" class="readmore">Read More <i class="fas fa-long-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="courses-item">
+              <div class="thumb">
+                <a href="https://cimage.in/courses/best-bbm-college-in-patna-4">
+                  <img src="https://cimage.in/sitepanel/uploads/course/bbm.jpg" alt="BBM">
+                </a>
+              </div>
+              <div class="courses-content">
+                <div class="cat"><i class="fas fa-graduation-cap"></i> BBM</div>
+                <h3><a href="https://cimage.in/courses/best-bbm-college-in-patna-4">BBM</a></h3>
+                <p>Bachelor of Business Management (BBM) is an undergraduate program of three years. The BBM degree is designed to teach students the skills necessary to perform leadership roles in business and corporate. Best BBM college in Patna Bihar with good placement.</p>
+                <a href="https://cimage.in/courses/best-bbm-college-in-patna-4" class="readmore">Read More <i class="fas fa-long-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="courses-item">
+              <div class="thumb">
+                <a href="https://cimage.in/courses/best-b-com-college-in-patna-5">
+                  <img src="https://cimage.in/sitepanel/uploads/course/bcom.jpg" alt="B.Com">
+                </a>
+              </div>
+              <div class="courses-content">
+                <div class="cat"><i class="fas fa-graduation-cap"></i> B.Com</div>
+                <h3><a href="https://cimage.in/courses/best-b-com-college-in-patna-5">B.Com</a></h3>
+                <p>The B.Com program provides fundamental knowledge in Accounting, Economics, Business Law, and Taxation. CIMAGE stands as the best B.Com college in Patna Bihar, offering a comprehensive three-year undergraduate course in commerce.</p>
+                <a href="https://cimage.in/courses/best-b-com-college-in-patna-5" class="readmore">Read More <i class="fas fa-long-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="courses-item">
+              <div class="thumb">
+                <a href="https://cimage.in/courses/best-pgdm-college-in-patna-6">
+                  <img src="https://cimage.in/sitepanel/uploads/course/pgdm.jpg" alt="PGDM">
+                </a>
+              </div>
+              <div class="courses-content">
+                <div class="cat"><i class="fas fa-graduation-cap"></i> PGDM</div>
+                <h3><a href="https://cimage.in/courses/best-pgdm-college-in-patna-6">PGDM</a></h3>
+                <p>PGDM, a 2-year (4-semester) program, gears graduates for thriving careers in corporate and PSU sectors. AIMA’s PGDM is highly regarded for its robust curriculum in both industry and academic spheres. As the best PGDM college in Patna Bihar, it ensures excellent placements for its students.</p>
+                <a href="https://cimage.in/courses/best-pgdm-college-in-patna-6" class="readmore">Read More <i class="fas fa-long-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- History Section -->
+    <section class="history-section">
+      <div class="container">
+        <div class="section-title">
+          <h3><i class="fas fa-university"></i> History of CIMAGE</h3>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-lg-6 col-md-12">
+            <div class="step-box">
+              <div class="text">
+                <p><strong>CIMAGE</strong>, <strong>inaugurated by the Hon C.M. of Bihar, Mr. Nitish Kumar in 2009</strong>, has come true to the high expectation of its stakeholders, namely students, Guardians, Academicians and mass at large and achieved phenomenal success.</p>
+                <p>One of the unique things, which makes itself stand apart is the innovative Teaching Pedagogy, followed at <a href="https://www.cimage.in/">CIMAGE</a>. The ‘Learning by Doing’, ‘Case Study Teaching’, Unique Assessment (Exam) System, which not only judges the students through their ‘Written Answers’ but examines the students in a very comprehensive manner, including their Skills, Personality, Project, Presentations, Learning, other Human Capabilities and Traits, needed to be successful in life. No wonder, <strong>CIMAGEians</strong> have set an example for others to follow by grabbing the title of being University Topper, year after years. Since inception, CIMAGEians have been topping University Examinations and winning Gold Medals. That is the reason, CIMAGEians find themselves very competent and confident in dealing with the Job responsibilities and challenges of life.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <img src="https://cimage.in/sitepanel/uploads/aboutus/cimage-about-cm.jpg" alt="CIMAGE Inauguration">
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-lg-6 col-md-12">
+            <img src="https://cimage.in/sitepanel/uploads/aboutus/cimage-about-award.jpg" alt="CIMAGE Awards">
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="step-box">
+              <div class="text">
+                <p><strong>CIMAGE's</strong> achievements have been acknowledged nationwide and a number of awards have been conferred upon: Getting awarded as ‘<a href="https://www.cimage.in/neeraj-agrawal-director-of-cimage-group-received-atal-ratna-award/">Atal Shresth Sansthan Samman’</a> for its Extra-ordinary contributions and achievements in the field of <strong>Management and IT Education in BIhar</strong> by the Union HRD Minister Sri Ramesh Pokhariyal Nishank’ or ‘Most Emerging Institute for Management Education-2012’, on national level by the All India Management Education Association (AIMA) or ‘<a href="https://www.cimage.in/cimage-recieved-best-b-school-of-india-award-by-assocham/">Best B-School of India (East) Award by ASSOCHAM</a>, Association of Indian Universities & Ministry of HRD, Government of India by Dr. Ram Shankar Katheria, Hon. Minister of Education for State’ are some of the many awards and acclaims, which CIMMAGE has been rewarded with.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="cimage-footer">
+      <div class="footer-container">
+        <div class="footer-column">
+          <h2>About Us</h2>
+          <p>Best BCA College in Patna Bihar offering an outstanding Job Placement. It is recognized as No.1 College in Patna Bihar for IT & Management Courses such as BCA, BBA, BBM, BSc.IT etc. Over the years It has an excellent campus placement record. CIMAGE is affiliated to Aaryabhatta Knowledge University (AKU) & Patliputra University (PPU). Popularly known as best BBA college. It Achieved best B-School of East India award by ASSOCHAM. CIMAGE is the only remote center of IIT Bombay in Bihar.</p>
+          <div class="social-links">
+            <a href="https://www.facebook.com/cimage" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.linkedin.com/company/cimage" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.instagram.com/cimagecollege" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com/cimagecollege" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.youtube.com/cimagepatna" title="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h2>Our Links</h2>
+          <ul>
+            <li><a href="https://cimagecollege.com/">CIMAGE Professional College</a></li>
+            <li><a href="https://cimagepatna.com/">CIMAGE</a></li>
+            <li><a href="https://catalystcollege.in/">Catalyst College</a></li>
+            <li><a href="https://cimagelawcollege.com/">CIMAGE National Law College</a></li>
+            <li><a href="https://cimage.in/admissions">Admission</a></li>
+            <li><a href="https://cimage.in/cimage-affiliation">CIMAGE Affiliation</a></li>
+            <li><a href="https://cimage.in/cimage-fee-structure">CIMAGE Fee Structure</a></li>
+            <li><a href="https://cimage.in/student-credit-card">Student Credit Card</a></li>
+            <li><a href="https://cimage.in/career">Career</a></li>
+            <li><a href="https://cimage.in/games">Games developed by CIMAGIANS</a></li>
+            <li><a href="https://cimage.in/contact-us">Contact Us</a></li>
+            <li><a href="https://cimage.in/privacy-policy">Privacy Policy</a></li>
+            <li><a href="https://cimage.in/refund-policy">Refund Policy</a></li>
+            <li><a href="https://cimage.in/terms-and-conditions-for-online-payment">Terms & Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h2>Our Courses</h2>
+          <ul>
+            <li><a href="https://cimage.in/courses/best-bca-college-in-patna-1">BCA (Under AKU & PPU)</a></li>
+            <li><a href="https://cimage.in/courses/best-bba-college-in-patna-2">BBA (Under AKU)</a></li>
+            <li><a href="https://cimage.in/courses/best-bbm-college-in-patna-4">BBM (Under PPU)</a></li>
+            <li><a href="https://cimage.in/courses/best-bcom-college-in-patna-5">B.Com (P) (Under AKU)</a></li>
+            <li><a href="https://cimage.in/courses/best-bsc-it-college-in-patna-3">B.Sc-IT (Under PPU)</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h2>Contact Us</h2>
+          <ul>
+            <li><i class="fas fa-phone"></i> <a href="tel:+919835024444">+91-9835024444</a></li>
+            <li><i class="fas fa-envelope"></i> <a href="mailto:info@cimage.in">info@cimage.in</a></li>
+            <li><i class="fas fa-map-marker-alt"></i> S.K. Puri Park, Boring Road, Patna</li>
+            <li class="facebook-embed">
+              <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fcimage&tabs&width=300&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=923613878835223" width="300" height="130" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div style="background:#2c3e50;color:#fff;text-align:center;padding:0.9rem 0;font-size:1rem;letter-spacing:0.5px;" class="copyright-wrap">
+        Copyright © VIJAYAM Educational Trust 2025. All rights reserved.
+      </div>
+    </footer>
+  </div>
+
+  <!-- Vapi AI Button Container -->
+  <div id="cimage-vapi-container"></div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+  <script>
+    // Mobile menu toggle
+    document.querySelector('.cimage-mobile-menu').addEventListener('click', () => {
+      document.querySelector('.cimage-nav-links').classList.toggle('active');
+    });
+
+    // Vapi AI Integration (with microphone/voice diagnostics)
+    (function () {
+      const vapiContainer = document.getElementById('cimage-vapi-container');
+      const assistantId = "dc47c000-6a5a-440b-bbf6-3ead381d5447";
+      const apiKey = "ba36bc4c-37dd-4693-aa31-e819756bd0ce";
+      const buttonConfig = {
+        position: "bottom-right",
+        offset: "40px",
+        width: "60px",
+        height: "60px",
+        idle: {
+          color: "rgb(86, 101, 115)",
+          type: "pill",
+          title: "Need Help?",
+          subtitle: "AI Assistant",
+          icon: "https://unpkg.com/lucide-static@0.321.0/icons/phone.svg"
+        },
+        loading: {
+          color: "#ffc107",
+          type: "pill",
+          title: "Connecting...",
+          subtitle: "Please wait",
+          icon: "https://unpkg.com/lucide-static@0.321.0/icons/loader.svg"
+        },
+        active: {
+          color: "rgb(86, 101, 115)",
+          type: "pill",
+          title: "Call Active",
+          subtitle: "Sujata is listening",
+          icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg"
+        }
+      };
+
+      if (window.__vapiSDKLoading) return;
+      window.__vapiSDKLoading = true;
+
+      if (window.__vapiInstance && typeof window.__vapiInstance.destroy === 'function') {
+        try { window.__vapiInstance.destroy(); } catch (e) { /* ignore */ }
+        window.__vapiInstance = null;
+      }
+      if (window.DailyIframe && window.DailyIframe.instances) {
+        try {
+          Object.values(window.DailyIframe.instances).forEach(inst => {
+            if (inst && typeof inst.destroy === 'function') inst.destroy();
+          });
+        } catch (e) { /* ignore */ }
+      }
+
+      function attachVapiEvents(instance) {
+        if (!instance) return;
+        // Listen for Vapi events
+        instance.on && instance.on('error', (err) => {
+          console.error('Vapi error:', err);
+          if (err && err.message && err.message.toLowerCase().includes('microphone')) {
+            vapiContainer.innerHTML = '<p style="color: red; font-size: 12px;">Microphone access denied. Please allow microphone permissions in your browser.</p>';
+          }
+        });
+        instance.on && instance.on('callStarted', () => {
+          console.log('Vapi call started (listening for your voice)');
+        });
+        instance.on && instance.on('callEnded', () => {
+          console.log('Vapi call ended');
+        });
+        instance.on && instance.on('micAccessDenied', () => {
+          vapiContainer.innerHTML = '<p style="color: red; font-size: 12px;">Microphone access denied. Please allow microphone permissions in your browser.</p>';
+        });
+      }
+
+      if (!window.vapiSDK) {
+        const script = document.createElement('script');
+        script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+        script.defer = true;
+        script.async = true;
+        script.onload = () => {
+          if (!window.vapiSDK) {
+            console.error("Vapi SDK failed to load. Check CDN URL or network.");
+            vapiContainer.innerHTML = '<p style="color: red; font-size: 12px;">Vapi AI failed to load</p>';
+            return;
+          }
+          try {
+            window.__vapiInstance = window.vapiSDK.run({
+              apiKey: apiKey,
+              assistant: assistantId,
+              config: buttonConfig,
+              container: vapiContainer
+            });
+            attachVapiEvents(window.__vapiInstance);
+            console.log("Vapi AI initialized successfully");
+          } catch (error) {
+            console.error("Vapi initialization error:", error);
+            vapiContainer.innerHTML = '<p style="color: red; font-size: 12px;">Vapi AI error</p>';
+          }
+        };
+        script.onerror = () => {
+          console.error("Vapi SDK script failed to load.");
+          vapiContainer.innerHTML = '<p style="color: red; font-size: 12px;">Vapi AI script failed</p>';
+        };
+        document.body.appendChild(script);
+      } else {
+        try {
+          window.__vapiInstance = window.vapiSDK.run({
+            apiKey: apiKey,
+            assistant: assistantId,
+            config: buttonConfig,
+            container: vapiContainer
+          });
+          attachVapiEvents(window.__vapiInstance);
+          console.log("Vapi AI initialized successfully (no reload)");
+        } catch (error) {
+          console.error("Vapi initialization error:", error);
+          vapiContainer.innerHTML = '<p style="color: red; font-size: 12px;">Vapi AI error</p>';
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
+
+
+<!-- this is my last wish -->

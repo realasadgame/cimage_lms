@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Lectures - CIMAGE College</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e6f0fa 0%, #f7f9fc 100%);
+      margin: 0;
+      padding: 0;
+      color: #1a2a44;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(59,130,246,0.10);
+      padding: 2.5rem 2rem;
+    }
+    .header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      gap: 1rem;
+    }
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #1a2a44;
+      margin: 0;
+    }
+    .header p {
+      font-size: 1.1rem;
+      color: #4b5e7a;
+      margin: 0.5rem 0 0 0;
+      font-weight: 500;
+    }
+    .back-button {
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.7rem 1.7rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s, box-shadow 0.3s;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+    }
+    .back-button i {
+      margin-right: 0.6rem;
+    }
+    .back-button:hover {
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+      box-shadow: 0 4px 16px rgba(59,130,246,0.13);
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-bottom: 2.2rem;
+      background: #f8fafc;
+      padding: 1.2rem 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(59,130,246,0.06);
+    }
+    .filter-select, .search-box {
+      padding: 0.85rem;
+      font-size: 1.05rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      width: 220px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      background: #fff;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+    }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2.2rem;
+    }
+    .video-card {
+      background: linear-gradient(135deg, #f7f9fc 60%, #e6f0fa 100%);
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(59,130,246,0.08);
+      padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.3s, transform 0.2s;
+      border: 1.5px solid #e5e7eb;
+      position: relative;
+    }
+    .video-card:hover {
+      box-shadow: 0 8px 32px rgba(59,130,246,0.13);
+      transform: translateY(-4px) scale(1.02);
+      border-color: #3b82f6;
+    }
+    .video-card iframe {
+      width: 100%;
+      height: 220px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 1.1rem;
+      box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+      background: #000;
+    }
+    .video-title {
+      font-size: 1.18rem;
+      font-weight: 600;
+      color: #1a2a44;
+      margin-bottom: 0.4rem;
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
+    .video-description {
+      font-size: 1.01rem;
+      color: #4b5e7a;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      min-height: 40px;
+    }
+    .video-meta {
+      font-size: 0.93rem;
+      color: #9ca3af;
+      text-align: center;
+      margin-bottom: 0.2rem;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 1rem; }
+      .header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .header h1 { font-size: 1.3rem; }
+      .filters { flex-direction: column; gap: 0.7rem; }
+      .filter-select, .search-box { width: 100%; }
+      .video-grid { grid-template-columns: 1fr; }
+      .video-card iframe { height: 160px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Video Lectures</h1>
+      <p>Watch and learn from subject-wise expert video lectures.</p>
+      <button class="back-button" onclick="window.location.href='student.html'">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </button>
+    </div>
+    <div class="filters">
+      <select class="filter-select" id="universitySelect">
+        <option value="">Select University</option>
+        <option value="PPU">PPU</option>
+        <option value="AKU">AKU</option>
+      </select>
+      <select class="filter-select" id="yearSemesterSelect">
+        <option value="">Select Year/Semester</option>
+      </select>
+      <select class="filter-select" id="facultySelect">
+        <option value="">Select Faculty</option>
+      </select>
+      <select class="filter-select" id="subjectSelect">
+        <option value="">Select Subject</option>
+      </select>
+      <input type="text" class="search-box" id="searchBox" placeholder="Search video lectures...">
+    </div>
+    <div class="video-grid" id="videosContainer">
+      <!-- Video cards will be populated dynamically -->
+    </div>
+  </div>
+  <script>
+    // Sample data structure for video lectures
+    const videosData = {
+        "PPU": {
+            "Part 1": {
+                "Amit Sir": {
+                    courses: {
+                        "C Programming": [
+                            { id: 1, title: "Introduction to C", description: "Basics of C programming language", url: "https://www.youtube.com/embed/KJgsSFOSQv0", uploaded: "2025-06-01" },
+                            { id: 2, title: "C Variables & Data Types", description: "Understanding variables and data types in C", url: "https://www.youtube.com/embed/1I5ZMmrOfnA", uploaded: "2025-06-02" }
+                        ]
+                    }
+                }
+            },
+            "Part 2": {},
+            "Part 3": {
+                "Sanjeev Sir": {
+                    courses: {
+                        "Web Designing": [
+                            { id: 3, title: "HTML Basics", description: "Learn the basics of HTML for web development", url: "https://www.youtube.com/embed/UB1O30fR-EE", uploaded: "2025-06-10" },
+                            { id: 4, title: "CSS Fundamentals", description: "Introduction to CSS styling", url: "https://www.youtube.com/embed/yfoY53QXEnI", uploaded: "2025-06-12" }
+                        ]
+                    }
+                }
+            }
+        },
+        "AKU": {
+            "Semester 1": {
+                "Neeraj Sir": {
+                    courses: {
+                        "Python Programming": [
+                            { id: 5, title: "Python Basics", description: "Getting started with Python", url: "https://www.youtube.com/embed/_uQrJ0TkZlc", uploaded: "2025-06-15" }
+                        ]
+                    }
+                }
+            }
+        }
+    };
+
+    // DOM Elements
+    const universitySelect = document.getElementById('universitySelect');
+    const yearSemesterSelect = document.getElementById('yearSemesterSelect');
+    const facultySelect = document.getElementById('facultySelect');
+    const subjectSelect = document.getElementById('subjectSelect');
+    const searchBox = document.getElementById('searchBox');
+    const videosContainer = document.getElementById('videosContainer');
+
+    universitySelect.addEventListener('change', () => {
+        const selectedUniversity = universitySelect.value;
+        yearSemesterSelect.innerHTML = '<option value="">Select Year/Semester</option>';
+        facultySelect.innerHTML = '<option value="">Select Faculty</option>';
+        subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+        videosContainer.innerHTML = '';
+        if (selectedUniversity === 'PPU') {
+            ['Part 1', 'Part 2', 'Part 3'].forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSemesterSelect.appendChild(option);
+            });
+        } else if (selectedUniversity === 'AKU') {
+            ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5', 'Semester 6'].forEach(semester => {
+                const option = document.createElement('option');
+                option.value = semester;
+                option.textContent = semester;
+                yearSemesterSelect.appendChild(option);
+            });
+        }
+    });
+
+    yearSemesterSelect.addEventListener('change', () => {
+        const selectedUniversity = universitySelect.value;
+        const selectedYearSemester = yearSemesterSelect.value;
+        facultySelect.innerHTML = '<option value="">Select Faculty</option>';
+        subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+        videosContainer.innerHTML = '';
+        if (selectedUniversity && selectedYearSemester && videosData[selectedUniversity][selectedYearSemester]) {
+            Object.keys(videosData[selectedUniversity][selectedYearSemester]).forEach(faculty => {
+                const option = document.createElement('option');
+                option.value = faculty;
+                option.textContent = faculty;
+                facultySelect.appendChild(option);
+            });
+        }
+    });
+
+    facultySelect.addEventListener('change', () => {
+        const selectedUniversity = universitySelect.value;
+        const selectedYearSemester = yearSemesterSelect.value;
+        const selectedFaculty = facultySelect.value;
+        subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+        videosContainer.innerHTML = '';
+        if (selectedUniversity && selectedYearSemester && selectedFaculty && videosData[selectedUniversity][selectedYearSemester][selectedFaculty]) {
+            const subjects = Object.keys(videosData[selectedUniversity][selectedYearSemester][selectedFaculty].courses);
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+        }
+        updateVideos();
+    });
+
+    subjectSelect.addEventListener('change', updateVideos);
+    searchBox.addEventListener('input', updateVideos);
+
+    function updateVideos() {
+        const selectedUniversity = universitySelect.value;
+        const selectedYearSemester = yearSemesterSelect.value;
+        const selectedFaculty = facultySelect.value;
+        const selectedSubject = subjectSelect.value;
+        const searchTerm = searchBox.value.toLowerCase();
+        videosContainer.innerHTML = '';
+        let anyShown = false;
+        if (searchTerm) {
+            Object.keys(videosData).forEach(university => {
+                Object.keys(videosData[university]).forEach(yearSemester => {
+                    Object.keys(videosData[university][yearSemester]).forEach(faculty => {
+                        const courses = videosData[university][yearSemester][faculty].courses;
+                        Object.keys(courses).forEach(subject => {
+                            courses[subject].forEach(video => {
+                                if (
+                                    video.title.toLowerCase().includes(searchTerm) ||
+                                    video.description.toLowerCase().includes(searchTerm)
+                                ) {
+                                    createVideoCard(video);
+                                    anyShown = true;
+                                }
+                            });
+                        });
+                    });
+                });
+            });
+        } else if (selectedUniversity && !selectedYearSemester) {
+            // Only university selected
+            Object.keys(videosData[selectedUniversity]).forEach(yearSemester => {
+                Object.keys(videosData[selectedUniversity][yearSemester]).forEach(faculty => {
+                    const courses = videosData[selectedUniversity][yearSemester][faculty].courses;
+                    Object.keys(courses).forEach(subject => {
+                        courses[subject].forEach(video => {
+                            createVideoCard(video);
+                            anyShown = true;
+                        });
+                    });
+                });
+            });
+        } else if (selectedUniversity && selectedYearSemester && !selectedFaculty) {
+            // University + year/semester selected
+            Object.keys(videosData[selectedUniversity][selectedYearSemester]).forEach(faculty => {
+                const courses = videosData[selectedUniversity][selectedYearSemester][faculty].courses;
+                Object.keys(courses).forEach(subject => {
+                    courses[subject].forEach(video => {
+                        createVideoCard(video);
+                        anyShown = true;
+                    });
+                });
+            });
+        } else if (selectedUniversity && selectedYearSemester && selectedFaculty && !selectedSubject) {
+            // University + year/semester + faculty selected
+            const courses = videosData[selectedUniversity][selectedYearSemester][selectedFaculty].courses;
+            Object.keys(courses).forEach(subject => {
+                courses[subject].forEach(video => {
+                    createVideoCard(video);
+                    anyShown = true;
+                });
+            });
+        } else if (selectedUniversity && selectedYearSemester && selectedFaculty && selectedSubject) {
+            // All filters selected
+            const videos = videosData[selectedUniversity][selectedYearSemester][selectedFaculty].courses[selectedSubject];
+            videos.forEach(video => {
+                createVideoCard(video);
+                anyShown = true;
+            });
+        } else {
+            // Default: show all videos
+            Object.keys(videosData).forEach(university => {
+                Object.keys(videosData[university]).forEach(yearSemester => {
+                    Object.keys(videosData[university][yearSemester]).forEach(faculty => {
+                        const courses = videosData[university][yearSemester][faculty].courses;
+                        Object.keys(courses).forEach(subject => {
+                            courses[subject].forEach(video => {
+                                createVideoCard(video);
+                                anyShown = true;
+                            });
+                        });
+                    });
+                });
+            });
+        }
+        if (!anyShown) {
+            videosContainer.innerHTML = '<div style="text-align:center;color:#888;">No videos found.</div>';
+        }
+    }
+
+    function createVideoCard(video) {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `
+            <iframe class="video-frame" src="${video.url}" allowfullscreen></iframe>
+            <h3 class="video-title">${video.title}</h3>
+            <p class="video-description">${video.description}</p>
+            <p class="video-meta">Uploaded: ${video.uploaded}</p>
+        `;
+        videosContainer.appendChild(card);
+    }
+  </script>
+</body>
+</html>

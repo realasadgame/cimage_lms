@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard - CIMAGE College</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #e6f0fa 0%, #f7f9fc 100%);
+      display: flex;
+      min-height: 100vh;
+      color: #1a2a44;
+    }
+
+    .sidebar {
+      width: 300px;
+      background: #ffffff;
+      padding: 2rem;
+      box-shadow: 4px 0 16px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .profile-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .profile-pic-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 1rem;
+    }
+
+    .profile-pic {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #e5e7eb;
+      background-size: cover;
+      background-position: center;
+      border: 4px solid #3b82f6;
+      transition: transform 0.3s ease;
+      background-image: url('https://i.pinimg.com/originals/1e/2e/2a/1e2e2a2e2e2e2e2e2e2e2e2e2e2e2e2e.jpg'); /* Default anime/cartoon college boy */
+    }
+
+    .profile-pic:hover {
+      transform: scale(1.05);
+    }
+
+    .edit-icon {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: #3b82f6;
+      color: white;
+      border-radius: 50%;
+      padding: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .edit-icon:hover {
+      background: #2563eb;
+    }
+
+    .edit-btn {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .edit-btn:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+    }
+
+    .profile-info {
+      width: 100%;
+      text-align: left;
+      margin-top: 1.5rem;
+    }
+
+    .profile-info h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #1a2a44;
+      text-align: center;
+    }
+
+    .profile-info h3 {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #3b82f6;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .profile-info p {
+      font-size: 0.9rem;
+      color: #4b5e7a;
+      margin-bottom: 0.75rem;
+      padding-left: 1rem;
+    }
+
+    .logout-btn {
+      margin-top: auto;
+      padding: 0.75rem;
+      background: linear-gradient(90deg, #ef4444, #f87171);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(90deg, #dc2626, #ef4444);
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 2.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .dashboard-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #1a2a44;
+      margin-bottom: 0.75rem;
+    }
+
+    .dashboard-quote {
+      font-size: 1.15rem;
+      font-weight: 500;
+      font-style: italic;
+      color: #4b5e7a;
+      margin-bottom: 2rem;
+      text-align: center;
+      position: relative;
+      padding-bottom: 0.5rem;
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dashboard-quote::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background: #3b82f6;
+    }
+
+    .dashboard-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, background 0.3s ease, border-bottom 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      border-bottom: 2px solid transparent;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+      background: linear-gradient(135deg, #f8fafc, #ffffff);
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon {
+      background: #3b82f6;
+      color: #fff;
+      font-size: 1.5rem;
+      padding: 0.75rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      transition: background 0.3s ease;
+    }
+
+    .card:hover .card-icon {
+      background: #2563eb;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1a2a44;
+    }
+
+    .card-content {
+      font-size: 0.9rem;
+      color: #4b5e7a;
+      line-height: 1.5;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      transform: translateY(20px);
+      z-index: 2000;
+      font-size: 0.85rem;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.error {
+      background: #ef4444;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        min-height: unset;
+        box-shadow: none;
+        padding: 1.2rem 0.7rem;
+        position: static;
+      }
+      .main-content {
+        padding: 1.2rem 0.7rem;
+        max-width: 100%;
+      }
+    }
+    @media (max-width: 600px) {
+      .sidebar {
+        width: 100%;
+        padding: 0.7rem 0.3rem;
+      }
+      .profile-pic-container {
+        width: 80px;
+        height: 80px;
+      }
+      .edit-btn, .logout-btn {
+        width: 100%;
+        font-size: 0.95rem;
+        padding: 0.7rem 0.5rem;
+      }
+      .main-content {
+        padding: 0.7rem 0.2rem;
+      }
+      .dashboard-title {
+        font-size: 1.3rem;
+      }
+      .profile-info h2 {
+        font-size: 1.2rem;
+      }
+      .profile-info h3 {
+        font-size: 1rem;
+      }
+      .profile-info p {
+        font-size: 0.85rem;
+        padding-left: 0.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="profile-section">
+      <div class="profile-pic-container">
+        <div class="profile-pic" id="profilePic"></div>
+        <label for="picInput" class="edit-icon" title="Change photo">
+          <i class="fas fa-pen"></i>
+        </label>
+        <input type="file" id="picInput" accept="image/*" style="display:none;" />
+      </div>
+      <button class="edit-btn" onclick="window.location.href='edit-profile.html'">Edit Profile</button>
+      <div class="profile-info">
+        <h2>Welcome</h2>
+        <h3 id="studentName">Mohd Asad Alam</h3>
+        <p><strong>Student ID:</strong> <span id="studentID">445-11942</span></p>
+        <p><strong>Email:</strong> <span id="studentEmail">shaikhmdasad786@gmail.com</span></p>
+        <p><strong>DOB:</strong> <span id="studentDOB">21 March 2005</span></p>
+        <p><strong>Contact:</strong> <span id="studentContact">8779477539</span></p>
+        <p><strong>Address:</strong> <span id="studentAddress">4th floor Umang Enclave, Vikas, Fair Field Colony, Patna 800011</span></p>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="main-content">
+    <h2 class="dashboard-title">Student Dashboard</h2>
+    <p class="dashboard-quote">Knowledge, Skills, Success</p>
+    <div class="dashboard-content">
+      <div class="card" onclick="window.location.href='video-lectures.html'">
+        <div class="card-header">
+          <div class="card-icon"><i class="fas fa-video"></i></div>
+          <div class="card-title">Video Lectures</div>
+        </div>
+        <div class="card-content">Access all recorded lectures by subject-wise experts.</div>
+      </div>
+      <div class="card" onclick="window.location.href='study-material.html'">
+        <div class="card-header">
+          <div class="card-icon"><i class="fas fa-book-open"></i></div>
+          <div class="card-title">Study Materials</div>
+        </div>
+        <div class="card-content">Download PDF notes, books, and practice sets.</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fas fa-question-circle"></i></div>
+          <div class="card-title">Previous Year Questions</div>
+        </div>
+        <div class="card-content">Practice with solved/unsolved past papers to enhance your preparation.</div>
+      </div>
+      <div class="card" onclick="window.location.href='discussion-forum.html'">
+        <div class="card-header">
+          <div class="card-icon"><i class="fas fa-comments"></i></div>
+          <div class="card-title">Discussion Forums</div>
+        </div>
+        <div class="card-content">Engage in academic discussions and collaborate with classmates.</div>
+      </div>
+      <div class="card" onclick="window.location.href='jobs.html'">
+        <div class="card-header">
+          <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+          <div class="card-title">Apply for Jobs</div>
+        </div>
+        <div class="card-content">Discover internship and job opportunities posted by the placement cell.</div>
+      </div>
+      <div class="card" onclick="window.location.href='workshop.html'">
+        <div class="card-header">
+          <div class="card-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+          <div class="card-title">Workshops</div>
+        </div>
+        <div class="card-content">Register for technical and non-technical workshops and seminars.</div>
+      </div>
+      <div class="card" onclick="window.location.href='timetable.html'">
+        <div class="card-header">
+          <div class="card-icon"><i class="fas fa-calendar-alt"></i></div>
+          <div class="card-title">Timetable</div>
+        </div>
+        <div class="card-content">View your class schedule for B.Sc. IT - 3rd Year</div>
+      </div>
+      <div class="card" onclick="window.location.href='library.html'">
+        <div class="card-header">
+          <div class="card-icon"><i class="fas fa-book-reader"></i></div>
+          <div class="card-title">Library Resources</div>
+        </div>
+        <div class="card-content">Access digital and physical library resources, including e-books, journals, and reference materials.</div>
+      </div>
+      <div class="card" onclick="window.location.href='assignment.html'">
+        <div class="card-header">
+          <div class="card-icon"><i class="fas fa-tasks"></i></div>
+          <div class="card-title">Assignments</div>
+        </div>
+        <div class="card-content">View and submit assignments for your courses.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      loadProfileData();
+      loadProfilePicture();
+    });
+
+    function handleProfilePicture() {
+      const picInput = document.getElementById("picInput");
+      if (picInput) {
+        picInput.removeEventListener("change", handlePicChange);
+        picInput.addEventListener("change", handlePicChange);
+      }
+    }
+
+    function handlePicChange(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const profilePic = document.getElementById("profilePic");
+          profilePic.style.backgroundImage = `url(${e.target.result})`;
+          localStorage.setItem("profilePicture", e.target.result);
+          showToast("Profile picture updated successfully!");
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function loadProfilePicture() {
+      const savedPic = localStorage.getItem("profilePicture");
+      if (savedPic) {
+        document.getElementById("profilePic").style.backgroundImage = `url(${savedPic})`;
+      }
+      handleProfilePicture();
+    }
+
+    function formatDateForDisplay(dateString) {
+      if (!dateString) return "01 January 2000";
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+    }
+
+    function loadProfileData() {
+      const profileData = JSON.parse(localStorage.getItem("profileData")) || {
+        name: "Mohd Asad Alam",
+        id: "445-11942",
+        email: "shaikhmdasad786@gmail.com",
+        dob: "2005-03-21",
+        contact: "8779477539",
+        address: "4th floor Umang Enclave, Vikas, Fair Field Colony, Patna 800011",
+      };
+      document.getElementById("studentName").textContent = profileData.name;
+      document.getElementById("studentID").textContent = profileData.id;
+      document.getElementById("studentEmail").textContent = profileData.email;
+      document.getElementById("studentDOB").textContent = formatDateForDisplay(profileData.dob);
+      document.getElementById("studentContact").textContent = profileData.contact;
+      document.getElementById("studentAddress").textContent = profileData.address;
+    }
+
+    function logout() {
+      localStorage.removeItem("profileData");
+      localStorage.removeItem("profilePicture");
+      localStorage.removeItem("assignments");
+      localStorage.removeItem("jobs");
+      showToast("Logged out successfully!");
+      setTimeout(() => {
+        window.location.href = "studentlogin.html";
+      }, 1000);
+    }
+
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+      if (!toast) return;
+      toast.textContent = message;
+      toast.className = `toast show ${type === "error" ? "error" : ""}`;
+      setTimeout(() => {
+        toast.className = "toast";
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

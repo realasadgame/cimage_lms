@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Assignments</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #e6f0fa 0%, #f7f9fc 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #1a2a44;
+      padding: 1rem;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 900px;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #1a2a44;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .assignments-container {
+      margin: 1.5rem 0;
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .assignments-header {
+      display: grid;
+      grid-template-columns: 20% 25% 20% 20% 15%;
+      background: #f8fafc;
+      padding: 1rem;
+      border-bottom: 2px solid #e5e7eb;
+      font-weight: 600;
+      color: #1a2a44;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .assignment-col {
+      padding: 0.75rem;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .assignment-col.sortable {
+      cursor: pointer;
+      position: relative;
+    }
+
+    .assignment-col.sortable:hover::after {
+      content: '↕';
+      margin-left: 5px;
+      font-size: 0.8rem;
+      color: #4b5e7a;
+    }
+
+    .assignment-col:nth-child(1), .assignment-col:nth-child(2) {
+      text-align: left;
+    }
+
+    .assignment-col:nth-child(3), .assignment-col:nth-child(4) {
+      text-align: center;
+    }
+
+    .assignment-col:nth-child(5) {
+      text-align: right;
+    }
+
+    .assignment-row {
+      display: grid;
+      grid-template-columns: 20% 25% 20% 20% 15%;
+      padding: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+      background: #ffffff;
+      font-size: 0.9rem;
+      color: #4b5e7a;
+      transition: background 0.2s;
+    }
+
+    .assignment-row:last-child {
+      border-bottom: none;
+    }
+
+    .assignment-row:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .assignment-row:hover {
+      background: #f1f5f9;
+    }
+
+    .assignment-row .assignment-col:nth-child(2) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .assignment-status {
+      text-align: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: inline-block;
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    .assignment-status.pending {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .assignment-status.submitted {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .submit-btn, .download-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .download-btn {
+      background: #10b981;
+    }
+
+    .submit-btn:hover {
+      background: #2563eb;
+    }
+
+    .download-btn:hover {
+      background: #059669;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    .back-btn {
+      padding: 0.75rem 1.5rem;
+      background: #e5e7eb;
+      color: #1a2a44;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      background: #d1d5db;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      transform: translateY(20px);
+      z-index: 2000;
+      font-size: 0.85rem;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.error {
+      background: #ef4444;
+    }
+
+    @media (max-width: 768px) {
+      .assignments-header, .assignment-row {
+        grid-template-columns: 1.5fr 2fr;
+        font-size: 0.85rem;
+      }
+      .assignment-col:nth-child(3), .assignment-col:nth-child(4), .assignment-col:nth-child(5) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>My Assignments</h2>
+    <div class="assignments-container">
+      <div class="assignments-header">
+        <div class="assignment-col sortable" onclick="sortAssignments('subject')">Subject</div>
+        <div class="assignment-col sortable" onclick="sortAssignments('title')">Title</div>
+        <div class="assignment-col sortable" onclick="sortAssignments('dueDate')">Due Date</div>
+        <div class="assignment-col sortable" onclick="sortAssignments('status')">Status</div>
+        <div class="assignment-col">Actions</div>
+      </div>
+      <div id="assignmentsList"></div>
+    </div>
+    <div class="buttons">
+      <button type="button" class="back-btn" onclick="window.location.href='student.html'">Back to Dashboard</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let assignments = JSON.parse(localStorage.getItem("assignments")) || [
+      { id: 1, subject: "Mathematics", title: "Calculus Assignment 1", dueDate: "2025-06-20", status: "Pending", file: null },
+      { id: 2, subject: "Physics", title: "Mechanics Assignment", dueDate: "2025-06-25", status: "Submitted", file: "mechanics.pdf" },
+      { id: 3, subject: "Chemistry", title: "Organic Chemistry Practice", dueDate: "2025-06-30", status: "Pending", file: null },
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadAssignments();
+    });
+
+    function loadAssignments(sortBy = "dueDate", order = "asc") {
+      const assignmentsList = document.getElementById("assignmentsList");
+      if (!assignmentsList) return;
+
+      assignmentsList.innerHTML = '<div class="assignment-row"><div class="assignment-col" style="grid-column: span 5; text-align: center;">Loading...</div></div>';
+
+      setTimeout(() => {
+        assignments.sort((a, b) => {
+          const valA = a[sortBy].toString().toLowerCase();
+          const valB = b[sortBy].toString().toLowerCase();
+          if (sortBy === "dueDate") {
+            return order === "asc" ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
+          }
+          return order === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        });
+
+        assignmentsList.innerHTML = "";
+        assignments.forEach((assignment) => {
+          const assignmentRow = document.createElement("div");
+          assignmentRow.className = "assignment-row";
+          assignmentRow.innerHTML = `
+            <div class="assignment-col">${assignment.subject}</div>
+            <div class="assignment-col">${assignment.title}</div>
+            <div class="assignment-col">${formatDateForDisplay(assignment.dueDate)}</div>
+            <div class="assignment-col"><span class="assignment-status ${assignment.status.toLowerCase()}">${assignment.status}</span></div>
+            <div class="assignment-col">
+              ${assignment.status === "Pending"
+                ? `<button class="submit-btn" onclick="submitAssignment(${assignment.id})">Submit</button>`
+                : `<button class="download-btn" onclick="downloadAssignment(${assignment.id})">Download</button>`}
+            </div>
+          `;
+          assignmentsList.appendChild(assignmentRow);
+        });
+      }, 500);
+    }
+
+    function sortAssignments(field) {
+      const currentOrder = localStorage.getItem(`sort-assignment-${field}`) || "asc";
+      const newOrder = currentOrder === "asc" ? "desc" : "asc";
+      localStorage.setItem(`sort-assignment-${field}`, newOrder);
+      loadAssignments(field, newOrder);
+    }
+
+    function submitAssignment(assignmentId) {
+      const fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.accept = ".pdf,.doc,.docx";
+      fileInput.onchange = function (e) {
+        const file = e.target.files[0];
+        if (file) {
+          const assignment = assignments.find((a) => a.id === assignmentId);
+          if (assignment) {
+            assignment.status = "Submitted";
+            assignment.file = file.name;
+            localStorage.setItem("assignments", JSON.stringify(assignments));
+            loadAssignments();
+            showToast(`Successfully submitted ${file.name} for ${assignment.subject}`);
+          }
+        }
+      };
+      fileInput.click();
+    }
+
+    function downloadAssignment(assignmentId) {
+      const assignment = assignments.find((a) => a.id === assignmentId);
+      if (assignment) {
+        showToast(`Downloading ${assignment.file} for ${assignment.subject}`);
+      }
+    }
+
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+      if (!toast) return;
+      toast.textContent = message;
+      toast.className = `toast show ${type === "error" ? "error" : ""}`;
+      setTimeout(() => {
+        toast.className = "toast";
+      }, 3000);
+    }
+
+    function formatDateForDisplay(dateString) {
+      if (!dateString) return "01 January 2000";
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+    }
+  </script>
+</body>
+</html>

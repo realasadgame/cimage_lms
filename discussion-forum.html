@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discussion Forum - CIMAGE LMS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e6f0fa 0%, #f7f9fc 100%);
+      margin: 0;
+      padding: 0;
+      color: #1a2a44;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      padding: 2rem;
+      min-height: 80vh;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2a44;
+    }
+    .back-btn {
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .back-btn:hover {
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+    }
+    .forum-section {
+      margin-bottom: 2.5rem;
+    }
+    .forum-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #2563eb;
+    }
+    .forum-desc {
+      color: #4b5e7a;
+      margin-bottom: 1.5rem;
+    }
+    .post-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(59,130,246,0.06);
+      margin-bottom: 2rem;
+    }
+    .post-form input, .post-form textarea {
+      padding: 0.9rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: none;
+    }
+    .post-form button {
+      align-self: flex-end;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .post-form button:hover {
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+    }
+    .discussion-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .discussion-card {
+      background: #f7f9fc;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(59,130,246,0.06);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+    }
+    .discussion-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1a2a44;
+    }
+    .discussion-meta {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
+    }
+    .discussion-content {
+      color: #374151;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .reply-btn {
+      background: none;
+      color: #3b82f6;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-top: 0.2rem;
+      align-self: flex-start;
+      transition: color 0.2s;
+    }
+    .reply-btn:hover {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+    .reply-section {
+      margin-top: 0.7rem;
+      margin-left: 1.5rem;
+      background: #e6f0fa;
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+    }
+    .reply-meta {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 0.2rem;
+    }
+    .reply-content {
+      color: #374151;
+      font-size: 0.97rem;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 0.7rem; }
+      .header h1 { font-size: 1.2rem; }
+      .forum-title { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Discussion Forum</h1>
+      <a href="student.html" class="back-btn">Back to Dashboard</a>
+    </div>
+    <div class="forum-section">
+      <div class="forum-title">Engage, Ask, and Collaborate!</div>
+      <div class="forum-desc">Post your questions, share knowledge, and help each other grow. This forum is for academic discussions, doubts, and collaborative learning among CIMAGE students.</div>
+      <form class="post-form" id="postForm">
+        <input type="text" id="postTitle" placeholder="Enter your question or topic..." required />
+        <textarea id="postContent" rows="3" placeholder="Describe your question or discussion point..." required></textarea>
+        <button type="submit">Post</button>
+      </form>
+    </div>
+    <div class="discussion-list" id="discussionList">
+      <!-- Discussion cards will be added here -->
+    </div>
+  </div>
+  <script>
+    // Load posts from localStorage
+    function loadDiscussions() {
+      const list = document.getElementById('discussionList');
+      list.innerHTML = '';
+      const discussions = JSON.parse(localStorage.getItem('discussions') || '[]');
+      discussions.forEach((post, idx) => {
+        const card = document.createElement('div');
+        card.className = 'discussion-card';
+        // Get profile info for post author
+        let profileData = JSON.parse(localStorage.getItem('profileData')) || { name: 'Anonymous', id: '', email: '', profilePic: '' };
+        let authorName = post.author || profileData.name || 'Anonymous';
+        let authorId = profileData.id ? `(${profileData.id})` : '';
+        let profilePic = localStorage.getItem('profilePicture') || '';
+        let profileImgTag = profilePic ? `<img src='${profilePic}' alt='Profile' style='width:32px;height:32px;border-radius:50%;margin-right:8px;vertical-align:middle;'>` : `<i class='fas fa-user-circle' style='font-size:32px;color:#3b82f6;margin-right:8px;vertical-align:middle;'></i>`;
+        card.innerHTML = `
+          <div style='display:flex;align-items:center;gap:0.5rem;'>
+            ${profileImgTag}
+            <div>
+              <div class="discussion-title">${post.title}</div>
+              <div class="discussion-meta">Posted by ${authorName} ${authorId} on ${post.date}</div>
+            </div>
+          </div>
+          <div class="discussion-content">${post.content}</div>
+          <button class="reply-btn" onclick="showReplyBox(${idx})">Reply</button>
+          <div class="reply-section" id="replySection${idx}" style="display:none;"></div>
+        `;
+        list.appendChild(card);
+        if (post.replies) {
+          post.replies.forEach(reply => {
+            // Get profile info for reply author (if available)
+            let replyProfilePic = profilePic;
+            let replyAuthorName = reply.author || authorName;
+            let replyAuthorId = authorId;
+            let replyProfileImgTag = replyProfilePic ? `<img src='${replyProfilePic}' alt='Profile' style='width:28px;height:28px;border-radius:50%;margin-right:6px;vertical-align:middle;'>` : `<i class='fas fa-user-circle' style='font-size:28px;color:#3b82f6;margin-right:6px;vertical-align:middle;'></i>`;
+            const replyDiv = document.createElement('div');
+            replyDiv.className = 'reply-section';
+            replyDiv.innerHTML = `
+              <div style='display:flex;align-items:center;gap:0.3rem;'>
+                ${replyProfileImgTag}
+                <div>
+                  <div class="reply-meta">${replyAuthorName} ${replyAuthorId} replied on ${reply.date}</div>
+                  <div class="reply-content">${reply.content}</div>
+                </div>
+              </div>
+            `;
+            card.appendChild(replyDiv);
+          });
+        }
+      });
+    }
+    // Post form submit
+    document.getElementById('postForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = document.getElementById('postTitle').value.trim();
+      const content = document.getElementById('postContent').value.trim();
+      if (!title || !content) return;
+      const discussions = JSON.parse(localStorage.getItem('discussions') || '[]');
+      discussions.unshift({ title, content, date: new Date().toLocaleString(), replies: [] });
+      localStorage.setItem('discussions', JSON.stringify(discussions));
+      this.reset();
+      loadDiscussions();
+    });
+    // Show reply box
+    window.showReplyBox = function(idx) {
+      const section = document.getElementById('replySection' + idx);
+      if (!section) return;
+      if (section.innerHTML.trim() === '') {
+        section.innerHTML = `
+          <form onsubmit="submitReply(event, ${idx})">
+            <input type='text' id='replyInput${idx}' placeholder='Write a reply...' required style='width:80%;margin-right:0.5rem;' />
+            <button type='submit' style='padding:0.4rem 1rem;'>Reply</button>
+          </form>
+        `;
+      }
+      section.style.display = section.style.display === 'none' ? 'block' : 'none';
+    };
+    // Submit reply
+    window.submitReply = function(e, idx) {
+      e.preventDefault();
+      const input = document.getElementById('replyInput' + idx);
+      const replyContent = input.value.trim();
+      if (!replyContent) return;
+      const discussions = JSON.parse(localStorage.getItem('discussions') || '[]');
+      if (!discussions[idx].replies) discussions[idx].replies = [];
+      discussions[idx].replies.push({ content: replyContent, date: new Date().toLocaleString() });
+      localStorage.setItem('discussions', JSON.stringify(discussions));
+      loadDiscussions();
+    };
+    // Initial load
+    loadDiscussions();
+  </script>
+</body>
+</html>

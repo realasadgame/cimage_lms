@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job & Internship Opportunities</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #e6f0fa 0%, #f7f9fc 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #1a2a44;
+      padding: 1rem;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 900px;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #1a2a44;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .jobs-container {
+      margin: 1.5rem 0;
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .jobs-header {
+      display: grid;
+      grid-template-columns: 20% 25% 20% 20% 15%;
+      background: #f8fafc;
+      padding: 1rem;
+      border-bottom: 2px solid #e5e7eb;
+      font-weight: 600;
+      color: #1a2a44;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .job-col {
+      padding: 0.75rem;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .job-col.sortable {
+      cursor: pointer;
+      position: relative;
+    }
+
+    .job-col.sortable:hover::after {
+      content: '↕';
+      margin-left: 5px;
+      font-size: 0.8rem;
+      color: #4b5e7a;
+    }
+
+    .job-col:nth-child(1), .job-col:nth-child(2) {
+      text-align: left;
+    }
+
+    .job-col:nth-child(3), .job-col:nth-child(4) {
+      text-align: center;
+    }
+
+    .job-col:nth-child(5) {
+      text-align: right;
+    }
+
+    .job-row {
+      display: grid;
+      grid-template-columns: 20% 25% 20% 20% 15%;
+      padding: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+      background: #ffffff;
+      font-size: 0.9rem;
+      color: #4b5e7a;
+      transition: background 0.2s;
+    }
+
+    .job-row:last-child {
+      border-bottom: none;
+    }
+
+    .job-row:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .job-row:hover {
+      background: #f1f5f9;
+    }
+
+    .job-row .job-col:nth-child(1), .job-row .job-col:nth-child(4) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .apply-btn, .details-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .details-btn {
+      background: #6b7280;
+    }
+
+    .apply-btn:hover {
+      background: #2563eb;
+    }
+
+    .details-btn:hover {
+      background: #4b5563;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .job-details-content {
+      font-size: 0.9rem;
+      color: #4b5e7a;
+      line-height: 1.6;
+    }
+
+    .job-details-content ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .job-details-content ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    .back-btn, .cancel-btn {
+      padding: 0.75rem 1.5rem;
+      background: #e5e7eb;
+      color: #1a2a44;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .back-btn:hover, .cancel-btn:hover {
+      transform: translateY(-2px);
+      background: #d1d5db;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      transform: translateY(20px);
+      z-index: 2000;
+      font-size: 0.85rem;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.error {
+      background: #ef4444;
+    }
+
+    @media (max-width: 768px) {
+      .jobs-header, .job-row {
+        grid-template-columns: 1.5fr 2fr;
+        font-size: 0.85rem;
+      }
+      .job-col:nth-child(3), .job-col:nth-child(4), .job-col:nth-child(5) {
+        display: none;
+      }
+      .modal-content {
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Job & Internship Opportunities</h2>
+    <div class="jobs-container">
+      <div class="jobs-header">
+        <div class="job-col sortable" onclick="sortJobs('title')">Job Title</div>
+        <div class="job-col sortable" onclick="sortJobs('company')">Company</div>
+        <div class="job-col">Location</div>
+        <div class="job-col">Eligibility</div>
+        <div class="job-col">Apply</div>
+      </div>
+      <div id="jobsList"></div>
+    </div>
+    <div class="buttons">
+      <button type="button" class="back-btn" onclick="window.location.href='student.html'">Back to Dashboard</button>
+    </div>
+  </div>
+
+  <div class="modal" id="jobDetailsModal">
+    <div class="modal-content">
+      <h2 id="jobDetailsTitle">Job Eligibility Details</h2>
+      <div class="job-details-content" id="jobDetailsContent"></div>
+      <div class="buttons">
+        <button type="button" class="cancel-btn" onclick="closeJobDetailsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let jobs = JSON.parse(localStorage.getItem("jobs")) || [
+      {
+        id: 1,
+        title: "Software Engineer Intern",
+        company: "Google",
+        location: "Bengaluru",
+        eligibility: "B.Tech CS/IT, 7+ CGPA",
+        detailedEligibility: `
+          <ul>
+            <li>B.Tech/B.E. in Computer Science, IT, or related fields</li>
+            <li>Minimum CGPA of 7.0</li>
+            <li>Strong knowledge of data structures and algorithms</li>
+            <li>Proficiency in at least one programming language (e.g., Java, Python, C++)</li>
+            <li>3rd or 4th-year students preferred</li>
+            <li>Good problem-solving and communication skills</li>
+          </ul>
+        `,
+        applyLink: "https://careers.google.com",
+      },
+      {
+        id: 2,
+        title: "UNICEF Internship",
+        company: "UNICEF",
+        location: "Remote",
+        eligibility: "Undergraduate, communication skills",
+        detailedEligibility: `
+          <ul>
+            <li>Enrolled in an undergraduate or graduate program</li>
+            <li>Strong written and verbal communication skills</li>
+            <li>Interest in child rights and international development</li>
+            <li>Proficiency in English; additional languages a plus</li>
+            <li>Ability to work independently in a remote setting</li>
+          </ul>
+        `,
+        applyLink: "https://www.unicef.org/careers",
+      },
+      {
+        id: 3,
+        title: "Software Trainee",
+        company: "Airdit",
+        location: "Bengaluru",
+        eligibility: "B.Tech, Java/SQL",
+        detailedEligibility: `
+          <ul>
+            <li>B.Tech in any discipline (2024/2025 graduates)</li>
+            <li>Knowledge of Java, SQL, and DBMS</li>
+            <li>Basic understanding of software development lifecycle</li>
+            <li>Strong analytical and problem-solving skills</li>
+            <li>Willingness to learn and adapt</li>
+          </ul>
+        `,
+        applyLink: "https://in.indeed.com",
+      },
+      {
+        id: 4,
+        title: "PM Internship 2025",
+        company: "Govt. of India",
+        location: "Various",
+        eligibility: "18-24 years, 12th pass",
+        detailedEligibility: `
+          <ul>
+            <li>Age between 18 and 24 years</li>
+            <li>Minimum qualification: 12th pass</li>
+            <li>Indian citizen</li>
+            <li>Interest in public policy or governance</li>
+            <li>Basic computer literacy</li>
+            <li>Available for a minimum of 6 months</li>
+          </ul>
+        `,
+        applyLink: "https://pminternshipscheme.com",
+      },
+      {
+        id: 5,
+        title: "Data Science Intern",
+        company: "Flipkart",
+        location: "Bengaluru",
+        eligibility: "B.Tech, Python/ML",
+        detailedEligibility: `
+          <ul>
+            <li>B.Tech/M.Tech in CS, Data Science, or related fields</li>
+            <li>Proficiency in Python and machine learning libraries</li>
+            <li>Knowledge of statistics and data analysis</li>
+            <li>Familiarity with SQL and big data tools a plus</li>
+            <li>3rd or 4th-year students or recent graduates</li>
+          </ul>
+        `,
+        applyLink: "https://www.internshala.com",
+      },
+      {
+        id: 6,
+        title: "NASA OSTEM Internship",
+        company: "NASA",
+        location: "Remote",
+        eligibility: "STEM, 3.0+ GPA",
+        detailedEligibility: `
+          <ul>
+            <li>Enrolled in a STEM undergraduate or graduate program</li>
+            <li>Minimum GPA of 3.0 on a 4.0 scale</li>
+            <li>U.S. citizenship required</li>
+            <li>Interest in space science or engineering</li>
+            <li>Strong teamwork and research skills</li>
+          </ul>
+        `,
+        applyLink: "https://www.nasa.gov/internships",
+      },
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadJobs();
+      window.addEventListener("click", handleModalClick);
+    });
+
+    function loadJobs(sortBy = "title", order = "asc") {
+      const jobsList = document.getElementById("jobsList");
+      if (!jobsList) return;
+
+      jobsList.innerHTML = '<div class="job-row"><div class="job-col" style="grid-column: span 5; text-align: center;">Loading...</div></div>';
+
+      setTimeout(() => {
+        jobs.sort((a, b) => {
+          const valA = a[sortBy].toString().toLowerCase();
+          const valB = b[sortBy].toString().toLowerCase();
+          return order === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        });
+
+        jobsList.innerHTML = "";
+        jobs.forEach((job) => {
+          const jobRow = document.createElement("div");
+          jobRow.className = "job-row";
+          jobRow.innerHTML = `
+            <div class="job-col">${job.title}</div>
+            <div class="job-col">${job.company}</div>
+            <div class="job-col">${job.location}</div>
+            <div class="job-col"><button class="details-btn" onclick="openJobDetailsModal(${job.id})">View Details</button></div>
+            <div class="job-col">
+              <a href="${job.applyLink}" target="_blank" class="apply-btn" onclick="applyJob(${job.id}); return true;">Apply</a>
+            </div>
+          `;
+          jobsList.appendChild(jobRow);
+        });
+      }, 500);
+    }
+
+    function sortJobs(field) {
+      const currentOrder = localStorage.getItem(`sort-job-${field}`) || "asc";
+      const newOrder = currentOrder === "asc" ? "desc" : "asc";
+      localStorage.setItem(`sort-job-${field}`, newOrder);
+      loadJobs(field, newOrder);
+    }
+
+    function applyJob(jobId) {
+      const job = jobs.find((j) => j.id === jobId);
+      if (job) {
+        showToast(`Applying for ${job.title} at ${job.company}`);
+      }
+    }
+
+    function openJobDetailsModal(jobId) {
+      const modal = document.getElementById("jobDetailsModal");
+      const titleElement = document.getElementById("jobDetailsTitle");
+      const contentElement = document.getElementById("jobDetailsContent");
+      if (!modal || !titleElement || !contentElement) return;
+
+      const job = jobs.find((j) => j.id === jobId);
+      if (job) {
+        titleElement.textContent = `${job.title} - Eligibility Details`;
+        contentElement.innerHTML = job.detailedEligibility;
+        modal.style.display = "flex";
+      }
+    }
+
+    function closeJobDetailsModal() {
+      const modal = document.getElementById("jobDetailsModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function handleModalClick(e) {
+      if (e.target.classList.contains("modal")) {
+        e.target.style.display = "none";
+      }
+    }
+
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+      if (!toast) return;
+      toast.textContent = message;
+      toast.className = `toast show ${type === "error" ? "error" : ""}`;
+      setTimeout(() => {
+        toast.className = "toast";
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

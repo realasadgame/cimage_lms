@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - CIMAGE College LMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .login-container {
+            max-width: 500px;
+            margin: 4rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .login-form {
+            margin-top: 2rem;
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 1rem 0;
+        }
+
+        .auth-link {
+            text-align: center;
+            color: #666;
+        }
+
+        .auth-link a {
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .auth-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                margin: 2rem auto;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <form class="login-form" action="admin-login.php" method="POST">
+            <h2>Admin Login</h2>
+            <div class="form-group">
+                <label for="admin-email">Email</label>
+                <input type="email" id="admin-email" name="admin-email" required>
+            </div>
+            <div class="form-group">
+                <label for="admin-password">Password</label>
+                <input type="password" id="admin-password" name="admin-password" required>
+            </div>
+            <div class="form-group">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember-me"> Remember me
+                </label>
+            </div>
+            <button type="submit" class="login-button">Login</button>
+            <p class="auth-link">Forgot password? <a href="forgot-password.html">Click here</a></p>
+        </form>
+    </div>
+</body>
+</html>
