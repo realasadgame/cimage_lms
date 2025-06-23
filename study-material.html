@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -94,7 +95,8 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .filter-select, .search-box {
+        .filter-select,
+        .search-box {
             padding: 0.9rem;
             border: 1px solid #d1d5db;
             border-radius: 8px;
@@ -102,7 +104,8 @@
             transition: border-color 0.3s;
         }
 
-        .filter-select:focus, .search-box:focus {
+        .filter-select:focus,
+        .search-box:focus {
             outline: none;
             border-color: #3b82f6;
         }
@@ -181,7 +184,6 @@
             color: white;
         }
 
-        /* Modal Styles for PDF Viewer (Used only on Desktop) */
         .modal {
             display: none;
             position: fixed;
@@ -260,7 +262,6 @@
             transform-origin: top left;
         }
 
-        /* Loading Indicator */
         .loading {
             display: none;
             position: absolute;
@@ -272,7 +273,6 @@
             font-weight: 500;
         }
 
-        /* Mobile-Specific Styles */
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -283,7 +283,8 @@
                 gap: 1rem;
             }
 
-            .filter-select, .search-box {
+            .filter-select,
+            .search-box {
                 width: 100%;
             }
 
@@ -295,7 +296,6 @@
                 font-size: 1rem;
             }
 
-            /* Modal is not used on mobile, but keep styles for consistency */
             .modal-content {
                 width: 100vw;
                 height: 100vh;
@@ -365,6 +365,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -396,7 +397,6 @@
         <div class="material-grid" id="materialsContainer">
         </div>
 
-        <!-- Modal for PDF Viewer (Used only on Desktop) -->
         <div class="modal" id="pdfModal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -440,7 +440,8 @@
                                 { id: 3, title: "HTML Basics", description: "Fundamentals of HTML", file: "ppu/part3/sanjeev/HTML_Basics_Presentation.pdf", type: "pdf", uploaded: "2025-06-07" },
                                 { id: 6, title: "Internet Connection: Dialup vs Leased Line", description: "Comparison of dial-up and leased line connections", file: "ppu/part3/sanjeev/Internet_Connection_Dialup_vs_LeasedLine.pdf", type: "pdf", uploaded: "2025-06-15" },
                                 { id: 7, title: "Email and FTP Services", description: "Overview of email and FTP services", file: "ppu/part3/sanjeev/Email_and_FTP_Services_Presentation.pdf", type: "pdf", uploaded: "2025-06-15" },
-                                { id: 8, title: "Internet Services and mIRC", description: "Introduction to internet services and mIRC", file: "ppu/part3/sanjeev/Internet_Services_and_mIRC_Presentation_5.pdf", type: "pdf", uploaded: "2025-06-15" }
+                                { id: 8, title: "Internet Services and mIRC", description: "Introduction to internet services and mIRC", file: "ppu/part3/sanjeev/Internet_Services_and_mIRC_Presentation_5.pdf", type: "pdf", uploaded: "2025-06-15" },
+                                { id: 14, title: "ASP and Importance in HTML",description: "Overview of ASP and its importance in HTML",file: "ppu/part3/sanjeev/ASP_and_Importance_in_HTML.pdf",type: "pdf",uploaded: "2025-06-19" }
                             ]
                         }
                     },
@@ -458,7 +459,15 @@
                     "Amit Shukla Sir": {
                         courses: {
                             "Visual Basic": [
-                                { id: 9, title: "Visual Programming with VB", description: "Introduction to visual programming using Visual Basic", file: "ppu/part3/amit/Visual Programming with VB.pdf", type: "pdf", uploaded: "2025-06-16" }
+                                { id: 9, title: "Visual Programming with VB", description: "Introduction to visual programming using Visual Basic", file: "ppu/part3/amit/visual_programming_with_VB.pdf", type: "pdf", uploaded: "2025-06-16" },
+                                {
+                                    id: 13,
+                                    title: "Structure Of a Visual Basic Application",
+                                    description: "A detailed structure of a Visual Basic application",
+                                    file: "ppu/part3/amit/structure_of_a_visual_basic_application.pdf",
+                                    type: "pdf",
+                                    uploaded: "2025-06-19"
+                                }
                             ]
                         }
                     }
@@ -502,6 +511,7 @@
                     yearSemesterSelect.appendChild(option);
                 });
             }
+            updateMaterials(); // Update materials immediately
         });
 
         // Handle year/semester change
@@ -520,6 +530,7 @@
                     facultySelect.appendChild(option);
                 });
             }
+            updateMaterials(); // Update materials immediately
         });
 
         // Handle faculty change
@@ -539,7 +550,7 @@
                     subjectSelect.appendChild(option);
                 });
             }
-            updateMaterials();
+            updateMaterials(); // Update materials immediately
         });
 
         // Handle subject change
@@ -581,11 +592,7 @@
                 if (!found) {
                     materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for your search.</div>';
                 }
-            } else {
-                if (!selectedUniversity || !selectedYearSemester || !selectedFaculty || !selectedSubject) {
-                    materialsContainer.innerHTML = '<div style="text-align:center;color:#4b5e7a;font-weight:500;">Please select all filters to view materials.</div>';
-                    return;
-                }
+            } else if (selectedUniversity && selectedYearSemester && selectedFaculty && selectedSubject) {
                 const materials = materialsData[selectedUniversity]?.[selectedYearSemester]?.[selectedFaculty]?.courses?.[selectedSubject] || [];
                 if (materials.length === 0) {
                     materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected filters.</div>';
@@ -594,6 +601,56 @@
                         createMaterialCard(material);
                     });
                 }
+            } else if (selectedUniversity && selectedYearSemester && selectedFaculty) {
+                // Show all subjects under the selected faculty
+                const facultyData = materialsData[selectedUniversity]?.[selectedYearSemester]?.[selectedFaculty]?.courses || {};
+                let allMaterials = [];
+                Object.values(facultyData).forEach(subjectMaterials => {
+                    allMaterials = allMaterials.concat(subjectMaterials);
+                });
+                if (allMaterials.length === 0) {
+                    materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected faculty.</div>';
+                } else {
+                    allMaterials.forEach(material => {
+                        createMaterialCard(material);
+                    });
+                }
+            } else if (selectedUniversity && selectedYearSemester) {
+                // Show all faculties under the selected year/semester
+                const yearSemesterData = materialsData[selectedUniversity]?.[selectedYearSemester] || {};
+                let allMaterials = [];
+                Object.values(yearSemesterData).forEach(faculty => {
+                    Object.values(faculty.courses).forEach(subjectMaterials => {
+                        allMaterials = allMaterials.concat(subjectMaterials);
+                    });
+                });
+                if (allMaterials.length === 0) {
+                    materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected year/semester.</div>';
+                } else {
+                    allMaterials.forEach(material => {
+                        createMaterialCard(material);
+                    });
+                }
+            } else if (selectedUniversity) {
+                // Show all year/semesters under the selected university
+                const universityData = materialsData[selectedUniversity] || {};
+                let allMaterials = [];
+                Object.values(universityData).forEach(yearSemester => {
+                    Object.values(yearSemester).forEach(faculty => {
+                        Object.values(faculty.courses).forEach(subjectMaterials => {
+                            allMaterials = allMaterials.concat(subjectMaterials);
+                        });
+                    });
+                });
+                if (allMaterials.length === 0) {
+                    materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected university.</div>';
+                } else {
+                    allMaterials.forEach(material => {
+                        createMaterialCard(material);
+                    });
+                }
+            } else {
+                materialsContainer.innerHTML = '<div style="text-align:center;color:#4b5e7a;font-weight:500;">Please select a university to view materials.</div>';
             }
         }
 
@@ -628,10 +685,8 @@
             const isMobile = window.innerWidth <= 768;
 
             if (isMobile) {
-                // Open PDF directly in a new tab for mobile devices
                 window.open(file, '_blank');
             } else {
-                // Use modal with iframe for desktop
                 pdfLoading.style.display = 'block';
                 pdfViewer.src = file;
                 modalTitle.textContent = title;
@@ -677,4 +732,5 @@
         });
     </script>
 </body>
+
 </html>

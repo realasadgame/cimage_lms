@@ -58,7 +58,7 @@
       background-position: center;
       border: 4px solid #3b82f6;
       transition: transform 0.3s ease;
-      background-image: url('https://i.pinimg.com/originals/1e/2e/2a/1e2e2a2e2e2e2e2e2e2e2e2e2e2e2e2e.jpg'); /* Default anime/cartoon college boy */
+      background-image: url('https://example.com/graduation-cap.png'); /* Replace with actual URL of the graduation cap image */
     }
 
     .profile-pic:hover {
@@ -451,6 +451,8 @@
       const savedPic = localStorage.getItem("profilePicture");
       if (savedPic) {
         document.getElementById("profilePic").style.backgroundImage = `url(${savedPic})`;
+      } else {
+        document.getElementById("profilePic").style.backgroundImage = "url('https://cdn1.iconfinder.com/data/icons/language-studies-thick-outline/33/language-10-1024.png')"; // Updated default image
       }
       handleProfilePicture();
     }
