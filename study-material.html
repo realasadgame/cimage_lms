@@ -410,327 +410,332 @@
             </div>
         </div>
     </div>
-    <script>
-        // Data structure organized by University → Year/Semester → Faculty → Subject
-        const materialsData = {
-            "PPU": {
-                "Part 1": {
-                    "Poddar Sir": {
-                        courses: {
-                            "English Communication": [
-                                {
-                                    id: 10,
-                                    title: "English Speaking Tips",
-                                    description: "english speaking fluency tips",
-                                    file: "ppu/part1/poddar/englishcommunication.pdf",
-                                    type: "pdf",
-                                    uploaded: "2022-03-22"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "Part 2": {},
-                "Part 3": {
-                    "Sanjeev Sir": {
-                        courses: {
-                            "Internet & Web Designing": [
-                                { id: 1, title: "Introduction to Internet & Applications", description: "Basics of internet and its applications", file: "ppu/part3/sanjeev/Introduction_to_Internet_and_Applications.pdf", type: "pdf", uploaded: "2025-05-27" },
-                                { id: 2, title: "Internet Protocols", description: "Overview of internet protocols", file: "ppu/part3/sanjeev/Internet_Protocols_Email.pdf", type: "pdf", uploaded: "2025-06-02" },
-                                { id: 3, title: "HTML Basics", description: "Fundamentals of HTML", file: "ppu/part3/sanjeev/HTML_Basics_Presentation.pdf", type: "pdf", uploaded: "2025-06-07" },
-                                { id: 6, title: "Internet Connection: Dialup vs Leased Line", description: "Comparison of dial-up and leased line connections", file: "ppu/part3/sanjeev/Internet_Connection_Dialup_vs_LeasedLine.pdf", type: "pdf", uploaded: "2025-06-15" },
-                                { id: 7, title: "Email and FTP Services", description: "Overview of email and FTP services", file: "ppu/part3/sanjeev/Email_and_FTP_Services_Presentation.pdf", type: "pdf", uploaded: "2025-06-15" },
-                                { id: 8, title: "Internet Services and mIRC", description: "Introduction to internet services and mIRC", file: "ppu/part3/sanjeev/Internet_Services_and_mIRC_Presentation_5.pdf", type: "pdf", uploaded: "2025-06-15" },
-                                { id: 14, title: "ASP and Importance in HTML",description: "Overview of ASP and its importance in HTML",file: "ppu/part3/sanjeev/ASP_and_Importance_in_HTML.pdf",type: "pdf",uploaded: "2025-06-19" }
-                            ]
-                        }
-                    },
-                    "Raju Sir": {
-                        courses: {
-                            "SQL Server": [
-                                { id: 4, title: "Introduction to SQL Server", description: "Basics of SQL queries", file: "ppu/part3/raju/Introduction to SQL Server_Datatypes.pdf", type: "pdf", uploaded: "2025-06-05" },
-                                { id: 5, title: "DQL Query", description: "Data Query Language (DQL)", file: "ppu/part3/raju/Data Query Language(DQL).pdf", type: "pdf", uploaded: "2025-06-10" }
-                            ],
-                            "Java Programming": [
-                                { id: 10, title: "Java Programming", description: "Introduction to Java programming", file: "ppu/part3/raju/Java Evolution_OverviewOfJava.pdf", type: "pdf", uploaded: "2025-06-15" }
-                            ]
-                        }
-                    },
-                    "Amit Shukla Sir": {
-                        courses: {
-                            "Visual Basic": [
-                                { id: 9, title: "Visual Programming with VB", description: "Introduction to visual programming using Visual Basic", file: "ppu/part3/amit/visual_programming_with_VB.pdf", type: "pdf", uploaded: "2025-06-16" },
-                                {
-                                    id: 13,
-                                    title: "Structure Of a Visual Basic Application",
-                                    description: "A detailed structure of a Visual Basic application",
-                                    file: "ppu/part3/amit/structure_of_a_visual_basic_application.pdf",
-                                    type: "pdf",
-                                    uploaded: "2025-06-19"
-                                }
-                            ]
-                        }
-                    }
+ 
+<script>
+  // Hardcoded materials (unchanged)
+  const defaultMaterialsData = {
+    "PPU": {
+      "Part 1": {
+        "Poddar Sir": {
+          courses: {
+            "English Communication": [
+              { id: 10, title: "English Speaking Tips", description: "english speaking fluency tips", file: "ppu/part1/poddar/englishcommunication.pdf", type: "pdf", uploaded: "2022-03-22" }
+            ]
+          }
+        }
+      },
+      "Part 2": {},
+      "Part 3": {
+        "Sanjeev Sir": {
+          courses: {
+            "Internet & Web Designing": [
+              { id: 1, title: "Introduction to Internet & Applications", description: "Basics of internet and its applications", file: "ppu/part3/sanjeev/Introduction_to_Internet_and_Applications.pdf", type: "pdf", uploaded: "2025-05-27" },
+              { id: 2, title: "Internet Protocols", description: "Overview of internet protocols", file: "ppu/part3/sanjeev/Internet_Protocols_Email.pdf", type: "pdf", uploaded: "2025-06-02" },
+              { id: 3, title: "HTML Basics", description: "Fundamentals of HTML", file: "ppu/part3/sanjeev/HTML_Basics_Presentation.pdf", type: "pdf", uploaded: "2025-06-07" },
+              { id: 6, title: "Internet Connection: Dialup vs Leased Line", description: "Comparison of dial-up and leased line connections", file: "ppu/part3/sanjeev/Internet_Connection_Dialup_vs_LeasedLine.pdf", type: "pdf", uploaded: "2025-06-15" },
+              { id: 7, title: "Email and FTP Services", description: "Overview of email and FTP services", file: "ppu/part3/sanjeev/Email_and_FTP_Services_Presentation.pdf", type: "pdf", uploaded: "2025-06-15" },
+              { id: 8, title: "Internet Services and mIRC", description: "Introduction to internet services and mIRC", file: "ppu/part3/sanjeev/Internet_Services_and_mIRC_Presentation_5.pdf", type: "pdf", uploaded: "2025-06-15" },
+              { id: 14, title: "ASP and Importance in HTML", description: "Overview of ASP and its importance in HTML", file: "ppu/part3/sanjeev/ASP_and_Importance_in_HTML.pdf", type: "pdf", uploaded: "2025-06-19" }
+            ]
+          }
+        },
+        "Raju Sir": {
+          courses: {
+            "SQL Server": [
+              { id: 4, title: "Introduction to SQL Server", description: "Basics of SQL queries", file: "ppu/part3/raju/Introduction to SQL Server_Datatypes.pdf", type: "pdf", uploaded: "2025-06-05" },
+              { id: 5, title: "DQL Query", description: "Data Query Language (DQL)", file: "ppu/part3/raju/Data Query Language(DQL).pdf", type: "pdf", uploaded: "2025-06-10" }
+            ],
+            "Java Programming": [
+              { id: 10, title: "Java Programming", description: "Introduction to Java programming", file: "ppu/part3/raju/Java Evolution_OverviewOfJava.pdf", type: "pdf", uploaded: "2025-06-15" }
+            ]
+          }
+        },
+        "Amit Shukla Sir": {
+          courses: {
+            "Visual Basic": [
+              { id: 9, title: "Visual Programming with VB", description: "Introduction to visual programming using Visual Basic", file: "ppu/part3/amit/visual_programming_with_VB.pdf", type: "pdf", uploaded: "2025-06-16" },
+              { id: 13, title: "Structure Of a Visual Basic Application", description: "A detailed structure of a Visual Basic application", file: "ppu/part3/amit/structure_of_a_visual_basic_application.pdf", type: "pdf", uploaded: "2025-06-19" }
+            ]
+          }
+        }
+      }
+    },
+    "AKU": {}
+  };
+
+  // Deep merge function to combine default and stored materials
+  function deepMerge(target, source) {
+    for (const key in source) {
+      if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+        if (!target[key]) target[key] = {};
+        deepMerge(target[key], source[key]);
+      } else if (Array.isArray(source[key])) {
+        if (!target[key]) target[key] = [];
+        target[key] = [...target[key], ...source[key]];
+      } else {
+        target[key] = source[key];
+      }
+    }
+    return target;
+  }
+
+  // Load and merge materials data
+  let materialsData = JSON.parse(JSON.stringify(defaultMaterialsData));
+  const storedMaterials = JSON.parse(localStorage.getItem('materialsData')) || {};
+  materialsData = deepMerge(materialsData, storedMaterials);
+
+  // DOM Elements
+  const universitySelect = document.getElementById('universitySelect');
+  const yearSemesterSelect = document.getElementById('yearSemesterSelect');
+  const facultySelect = document.getElementById('facultySelect');
+  const subjectSelect = document.getElementById('subjectSelect');
+  const searchBox = document.getElementById('searchBox');
+  const materialsContainer = document.getElementById('materialsContainer');
+  const pdfModal = document.getElementById('pdfModal');
+  const pdfViewer = document.getElementById('pdfViewer');
+  const modalTitle = document.getElementById('modalTitle');
+  const pdfLoading = document.getElementById('pdfLoading');
+
+  // Handle university change
+  universitySelect.addEventListener('change', () => {
+    const selectedUniversity = universitySelect.value;
+    yearSemesterSelect.innerHTML = '<option value="">Select Year/Semester</option>';
+    facultySelect.innerHTML = '<option value="">Select Faculty</option>';
+    subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+    materialsContainer.innerHTML = '';
+
+    if (selectedUniversity === 'PPU') {
+      ['Part 1', 'Part 2', 'Part 3'].forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearSemesterSelect.appendChild(option);
+      });
+    } else if (selectedUniversity === 'AKU') {
+      ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5', 'Semester 6'].forEach(semester => {
+        const option = document.createElement('option');
+        option.value = semester;
+        option.textContent = semester;
+        yearSemesterSelect.appendChild(option);
+      });
+    }
+    updateMaterials();
+  });
+
+  // Handle year/semester change
+  yearSemesterSelect.addEventListener('change', () => {
+    const selectedUniversity = universitySelect.value;
+    const selectedYearSemester = yearSemesterSelect.value;
+    facultySelect.innerHTML = '<option value="">Select Faculty</option>';
+    subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+    materialsContainer.innerHTML = '';
+
+    if (selectedUniversity && selectedYearSemester && materialsData[selectedUniversity][selectedYearSemester]) {
+      Object.keys(materialsData[selectedUniversity][selectedYearSemester]).forEach(faculty => {
+        const option = document.createElement('option');
+        option.value = faculty;
+        option.textContent = faculty;
+        facultySelect.appendChild(option);
+      });
+    }
+    updateMaterials();
+  });
+
+  // Handle faculty change
+  facultySelect.addEventListener('change', () => {
+    const selectedUniversity = universitySelect.value;
+    const selectedYearSemester = yearSemesterSelect.value;
+    const selectedFaculty = facultySelect.value;
+    subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+    materialsContainer.innerHTML = '';
+
+    if (selectedUniversity && selectedYearSemester && selectedFaculty && materialsData[selectedUniversity][selectedYearSemester][selectedFaculty]) {
+      const subjects = Object.keys(materialsData[selectedUniversity][selectedYearSemester][selectedFaculty].courses);
+      subjects.forEach(subject => {
+        const option = document.createElement('option');
+        option.value = subject;
+        option.textContent = subject;
+        subjectSelect.appendChild(option);
+      });
+    }
+    updateMaterials();
+  });
+
+  // Handle subject change
+  subjectSelect.addEventListener('change', updateMaterials);
+
+  // Handle search
+  searchBox.addEventListener('input', updateMaterials);
+
+  // Update materials based on filters or search
+  function updateMaterials() {
+    const selectedUniversity = universitySelect.value;
+    const selectedYearSemester = yearSemesterSelect.value;
+    const selectedFaculty = facultySelect.value;
+    const selectedSubject = subjectSelect.value;
+    const searchTerm = searchBox.value.toLowerCase();
+    materialsContainer.innerHTML = '';
+
+    let found = false;
+
+    if (searchTerm) {
+      Object.keys(materialsData).forEach(university => {
+        Object.keys(materialsData[university]).forEach(yearSemester => {
+          Object.keys(materialsData[university][yearSemester]).forEach(faculty => {
+            const courses = materialsData[university][yearSemester][faculty].courses;
+            Object.keys(courses).forEach(subject => {
+              courses[subject].forEach(material => {
+                if (
+                  material.title.toLowerCase().includes(searchTerm) ||
+                  material.description.toLowerCase().includes(searchTerm)
+                ) {
+                  createMaterialCard(material);
+                  found = true;
                 }
-            },
-            "AKU": {}
-        };
-
-        // DOM Elements
-        const universitySelect = document.getElementById('universitySelect');
-        const yearSemesterSelect = document.getElementById('yearSemesterSelect');
-        const facultySelect = document.getElementById('facultySelect');
-        const subjectSelect = document.getElementById('subjectSelect');
-        const searchBox = document.getElementById('searchBox');
-        const materialsContainer = document.getElementById('materialsContainer');
-        const pdfModal = document.getElementById('pdfModal');
-        const pdfViewer = document.getElementById('pdfViewer');
-        const modalTitle = document.getElementById('modalTitle');
-        const pdfLoading = document.getElementById('pdfLoading');
-
-        // Handle university change
-        universitySelect.addEventListener('change', () => {
-            const selectedUniversity = universitySelect.value;
-            yearSemesterSelect.innerHTML = '<option value="">Select Year/Semester</option>';
-            facultySelect.innerHTML = '<option value="">Select Faculty</option>';
-            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
-            materialsContainer.innerHTML = '';
-
-            if (selectedUniversity === 'PPU') {
-                ['Part 1', 'Part 2', 'Part 3'].forEach(year => {
-                    const option = document.createElement('option');
-                    option.value = year;
-                    option.textContent = year;
-                    yearSemesterSelect.appendChild(option);
-                });
-            } else if (selectedUniversity === 'AKU') {
-                ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5', 'Semester 6'].forEach(semester => {
-                    const option = document.createElement('option');
-                    option.value = semester;
-                    option.textContent = semester;
-                    yearSemesterSelect.appendChild(option);
-                });
-            }
-            updateMaterials(); // Update materials immediately
+              });
+            });
+          });
         });
-
-        // Handle year/semester change
-        yearSemesterSelect.addEventListener('change', () => {
-            const selectedUniversity = universitySelect.value;
-            const selectedYearSemester = yearSemesterSelect.value;
-            facultySelect.innerHTML = '<option value="">Select Faculty</option>';
-            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
-            materialsContainer.innerHTML = '';
-
-            if (selectedUniversity && selectedYearSemester && materialsData[selectedUniversity][selectedYearSemester]) {
-                Object.keys(materialsData[selectedUniversity][selectedYearSemester]).forEach(faculty => {
-                    const option = document.createElement('option');
-                    option.value = faculty;
-                    option.textContent = faculty;
-                    facultySelect.appendChild(option);
-                });
-            }
-            updateMaterials(); // Update materials immediately
+      });
+      if (!found) {
+        materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for your search.</div>';
+      }
+    } else if (selectedUniversity && selectedYearSemester && selectedFaculty && selectedSubject) {
+      const materials = materialsData[selectedUniversity]?.[selectedYearSemester]?.[selectedFaculty]?.courses?.[selectedSubject] || [];
+      if (materials.length === 0) {
+        materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected filters.</div>';
+      } else {
+        materials.forEach(material => {
+          createMaterialCard(material);
         });
-
-        // Handle faculty change
-        facultySelect.addEventListener('change', () => {
-            const selectedUniversity = universitySelect.value;
-            const selectedYearSemester = yearSemesterSelect.value;
-            const selectedFaculty = facultySelect.value;
-            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
-            materialsContainer.innerHTML = '';
-
-            if (selectedUniversity && selectedYearSemester && selectedFaculty && materialsData[selectedUniversity][selectedYearSemester][selectedFaculty]) {
-                const subjects = Object.keys(materialsData[selectedUniversity][selectedYearSemester][selectedFaculty].courses);
-                subjects.forEach(subject => {
-                    const option = document.createElement('option');
-                    option.value = subject;
-                    option.textContent = subject;
-                    subjectSelect.appendChild(option);
-                });
-            }
-            updateMaterials(); // Update materials immediately
+      }
+    } else if (selectedUniversity && selectedYearSemester && selectedFaculty) {
+      const facultyData = materialsData[selectedUniversity]?.[selectedYearSemester]?.[selectedFaculty]?.courses || {};
+      let allMaterials = [];
+      Object.values(facultyData).forEach(subjectMaterials => {
+        allMaterials = allMaterials.concat(subjectMaterials);
+      });
+      if (allMaterials.length === 0) {
+        materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected faculty.</div>';
+      } else {
+        allMaterials.forEach(material => {
+          createMaterialCard(material);
         });
-
-        // Handle subject change
-        subjectSelect.addEventListener('change', updateMaterials);
-
-        // Handle search
-        searchBox.addEventListener('input', updateMaterials);
-
-        // Update materials based on filters or search
-        function updateMaterials() {
-            const selectedUniversity = universitySelect.value;
-            const selectedYearSemester = yearSemesterSelect.value;
-            const selectedFaculty = facultySelect.value;
-            const selectedSubject = subjectSelect.value;
-            const searchTerm = searchBox.value.toLowerCase();
-            materialsContainer.innerHTML = '';
-
-            let found = false;
-
-            if (searchTerm) {
-                Object.keys(materialsData).forEach(university => {
-                    Object.keys(materialsData[university]).forEach(yearSemester => {
-                        Object.keys(materialsData[university][yearSemester]).forEach(faculty => {
-                            const courses = materialsData[university][yearSemester][faculty].courses;
-                            Object.keys(courses).forEach(subject => {
-                                courses[subject].forEach(material => {
-                                    if (
-                                        material.title.toLowerCase().includes(searchTerm) ||
-                                        material.description.toLowerCase().includes(searchTerm)
-                                    ) {
-                                        createMaterialCard(material);
-                                        found = true;
-                                    }
-                                });
-                            });
-                        });
-                    });
-                });
-                if (!found) {
-                    materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for your search.</div>';
-                }
-            } else if (selectedUniversity && selectedYearSemester && selectedFaculty && selectedSubject) {
-                const materials = materialsData[selectedUniversity]?.[selectedYearSemester]?.[selectedFaculty]?.courses?.[selectedSubject] || [];
-                if (materials.length === 0) {
-                    materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected filters.</div>';
-                } else {
-                    materials.forEach(material => {
-                        createMaterialCard(material);
-                    });
-                }
-            } else if (selectedUniversity && selectedYearSemester && selectedFaculty) {
-                // Show all subjects under the selected faculty
-                const facultyData = materialsData[selectedUniversity]?.[selectedYearSemester]?.[selectedFaculty]?.courses || {};
-                let allMaterials = [];
-                Object.values(facultyData).forEach(subjectMaterials => {
-                    allMaterials = allMaterials.concat(subjectMaterials);
-                });
-                if (allMaterials.length === 0) {
-                    materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected faculty.</div>';
-                } else {
-                    allMaterials.forEach(material => {
-                        createMaterialCard(material);
-                    });
-                }
-            } else if (selectedUniversity && selectedYearSemester) {
-                // Show all faculties under the selected year/semester
-                const yearSemesterData = materialsData[selectedUniversity]?.[selectedYearSemester] || {};
-                let allMaterials = [];
-                Object.values(yearSemesterData).forEach(faculty => {
-                    Object.values(faculty.courses).forEach(subjectMaterials => {
-                        allMaterials = allMaterials.concat(subjectMaterials);
-                    });
-                });
-                if (allMaterials.length === 0) {
-                    materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected year/semester.</div>';
-                } else {
-                    allMaterials.forEach(material => {
-                        createMaterialCard(material);
-                    });
-                }
-            } else if (selectedUniversity) {
-                // Show all year/semesters under the selected university
-                const universityData = materialsData[selectedUniversity] || {};
-                let allMaterials = [];
-                Object.values(universityData).forEach(yearSemester => {
-                    Object.values(yearSemester).forEach(faculty => {
-                        Object.values(faculty.courses).forEach(subjectMaterials => {
-                            allMaterials = allMaterials.concat(subjectMaterials);
-                        });
-                    });
-                });
-                if (allMaterials.length === 0) {
-                    materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected university.</div>';
-                } else {
-                    allMaterials.forEach(material => {
-                        createMaterialCard(material);
-                    });
-                }
-            } else {
-                materialsContainer.innerHTML = '<div style="text-align:center;color:#4b5e7a;font-weight:500;">Please select a university to view materials.</div>';
-            }
-        }
-
-        // Create material card
-        function createMaterialCard(material) {
-            const card = document.createElement('div');
-            card.className = 'material-card';
-            card.innerHTML = `
-                <h3 class="material-title">${material.title}</h3>
-                <p class="material-description">${material.description}</p>
-                <p class="material-meta">Uploaded: ${material.uploaded} | Type: ${material.type.toUpperCase()}</p>
-                <div class="action-buttons">
-                    <button class="action-button view-btn" onclick="viewMaterial('${material.file}', '${material.title}')">
-                        <i class="fas fa-eye"></i> View
-                    </button>
-                    <button class="action-button download-btn" onclick="downloadMaterial('${material.file}', '${material.type}')">
-                        <i class="fas fa-download"></i> Download
-                    </button>
-                </div>
-            `;
-            materialsContainer.appendChild(card);
-        }
-
-        // View material
-        function viewMaterial(file, title) {
-            console.log("Attempting to view: ", file);
-            if (!file) {
-                alert("File path is invalid!");
-                return;
-            }
-
-            const isMobile = window.innerWidth <= 768;
-
-            if (isMobile) {
-                window.open(file, '_blank');
-            } else {
-                pdfLoading.style.display = 'block';
-                pdfViewer.src = file;
-                modalTitle.textContent = title;
-                pdfModal.style.display = 'flex';
-            }
-        }
-
-        // Hide loading indicator
-        function hideLoading() {
-            pdfLoading.style.display = 'none';
-        }
-
-        // Close modal
-        function closeModal() {
-            pdfModal.style.display = 'none';
-            pdfViewer.src = '';
-            pdfLoading.style.display = 'none';
-        }
-
-        // Download material
-        function downloadMaterial(file, type) {
-            console.log("Attempting to download: ", file, "Type: ", type);
-            if (!file) {
-                alert("File path is invalid!");
-                return;
-            }
-            const link = document.createElement('a');
-            link.href = file;
-            link.download = file.split('/').pop();
-            if (type === 'jpg') {
-                link.target = '_blank';
-            }
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // Close modal when clicking outside
-        pdfModal.addEventListener('click', (event) => {
-            if (event.target === pdfModal) {
-                closeModal();
-            }
+      }
+    } else if (selectedUniversity && selectedYearSemester) {
+      const yearSemesterData = materialsData[selectedUniversity]?.[selectedYearSemester] || {};
+      let allMaterials = [];
+      Object.values(yearSemesterData).forEach(faculty => {
+        Object.values(faculty.courses).forEach(subjectMaterials => {
+          allMaterials = allMaterials.concat(subjectMaterials);
         });
-    </script>
+      });
+      if (allMaterials.length === 0) {
+        materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected year/semester.</div>';
+      } else {
+        allMaterials.forEach(material => {
+          createMaterialCard(material);
+        });
+      }
+    } else if (selectedUniversity) {
+      const universityData = materialsData[selectedUniversity] || {};
+      let allMaterials = [];
+      Object.values(universityData).forEach(yearSemester => {
+        Object.values(yearSemester).forEach(faculty => {
+          Object.values(faculty.courses).forEach(subjectMaterials => {
+            allMaterials = allMaterials.concat(subjectMaterials);
+          });
+        });
+      });
+      if (allMaterials.length === 0) {
+        materialsContainer.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for the selected university.</div>';
+      } else {
+        allMaterials.forEach(material => {
+          createMaterialCard(material);
+        });
+      }
+    } else {
+      materialsContainer.innerHTML = '<div style="text-align:center;color:#4b5e7a;font-weight:500;">Please select a university to view materials.</div>';
+    }
+  }
+
+  // Create material card
+  function createMaterialCard(material) {
+    const card = document.createElement('div');
+    card.className = 'material-card';
+    card.innerHTML = `
+      <h3 class="material-title">${material.title}</h3>
+      <p class="material-description">${material.description}</p>
+      <p class="material-meta">Uploaded: ${material.uploaded} | Type: ${material.type.toUpperCase()}</p>
+      <div class="action-buttons">
+        <button class="action-button view-btn" onclick="viewMaterial('${material.file}', '${material.title}')">
+          <i class="fas fa-eye"></i> View
+        </button>
+        <button class="action-button download-btn" onclick="downloadMaterial('${material.file}', '${material.type}')">
+          <i class="fas fa-download"></i> Download
+        </button>
+      </div>
+    `;
+    materialsContainer.appendChild(card);
+  }
+
+  // View material
+  function viewMaterial(file, title) {
+    console.log("Attempting to view: ", file);
+    if (!file) {
+      alert("File path is invalid!");
+      return;
+    }
+
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+      window.open(file, '_blank');
+    } else {
+      pdfLoading.style.display = 'block';
+      pdfViewer.src = file;
+      modalTitle.textContent = title;
+      pdfModal.style.display = 'flex';
+    }
+  }
+
+  // Hide loading indicator
+  function hideLoading() {
+    pdfLoading.style.display = 'none';
+  }
+
+  // Close modal
+  function closeModal() {
+    pdfModal.style.display = 'none';
+    pdfViewer.src = '';
+    pdfLoading.style.display = 'none';
+  }
+
+  // Download material
+  function downloadMaterial(file, type) {
+    console.log("Attempting to download: ", file, "Type: ", type);
+    if (!file) {
+      alert("File path is invalid!");
+      return;
+    }
+    const link = document.createElement('a');
+    link.href = file;
+    link.download = file.split('/').pop() || `material.${type}`;
+    if (type === 'jpg') {
+      link.target = '_blank';
+    }
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Close modal when clicking outside
+  pdfModal.addEventListener('click', (event) => {
+    if (event.target === pdfModal) {
+      closeModal();
+    }
+  });
+</script>
 </body>
 
 </html>

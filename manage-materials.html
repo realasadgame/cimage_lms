@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <title>Manage Study Materials - Faculty Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #e6f0fa 0%, #f7f9fc 100%);
+            color: #1a2a44;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            font-size: 2rem;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            font-size: 1rem;
+            color: #6b7280;
+        }
+        .back-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s, background 0.3s;
+        }
+        .back-button:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+        .back-button i {
+            font-size: 1.1rem;
+        }
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4b5e7a;
+            cursor: pointer;
+            transition: color 0.3s, border-bottom 0.3s;
+        }
+        .tab.active {
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #1a2a44;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #f9fafb;
+            color: #1a2a44;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .form-group.error input,
+        .form-group.error select,
+        .form-group.error textarea {
+            border-color: #ef4444;
+        }
+        .form-group.error .error-message {
+            display: block;
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+        .error-message {
+            display: none;
+        }
+        .submit-button {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(90deg, #2563eb, #1e3a8a);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            position: relative;
+        }
+        .submit-button:hover {
+            background: linear-gradient(90deg, #1e3a8a, #2563eb);
+            transform: translateY(-2px);
+        }
+        .submit-button.loading::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .submit-button.loading span {
+            opacity: 0;
+        }
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .filters {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .filter-select {
+            padding: 0.9rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 220px;
+            transition: border-color 0.3s;
+        }
+        .filter-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .material-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .material-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .material-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        .material-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1a2a44;
+            margin-bottom: 0.8rem;
+        }
+        .material-description {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        .material-meta {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .action-button {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .action-button:hover {
+            transform: scale(1.05);
+        }
+        .view-btn {
+            background: #3b82f6;
+            color: white;
+        }
+        .edit-btn {
+            background: #10b981;
+            color: white;
+        }
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow: auto;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 95vw;
+            max-width: 600px;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: #1a2a44;
+            margin: 0;
+        }
+        .close-modal {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .close-modal:hover {
+            background: #dc2626;
+        }
+        .modal-body {
+            padding: 0;
+        }
+        .pdf-modal-content {
+            max-width: 1000px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .pdf-modal-body {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .pdf-modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            color: #3b82f6;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .header p {
+                font-size: 0.95rem;
+            }
+            .back-button {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            .filters {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .filter-select {
+                width: 100%;
+            }
+            .material-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                width: 90vw;
+                padding: 1.5rem;
+            }
+            .pdf-modal-content {
+                width: 100vw;
+                height: 100vh;
+                max-width: none;
+                max-height: none;
+                border-radius: 0;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                margin: 0.5rem;
+                padding: 1rem;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 0.8rem;
+                font-size: 0.95rem;
+            }
+            .submit-button {
+                padding: 0.8rem;
+                font-size: 0.95rem;
+            }
+            .modal-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-button" onclick="window.location.href='faculty.html'">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
+            <h1><i class="fas fa-book"></i> Manage Study Materials</h1>
+            <p>Upload, view, edit, or delete PDF study materials for students.</p>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="upload">Upload</div>
+            <div class="tab" data-tab="view">View</div>
+        </div>
+
+        <div class="tab-content active" id="upload">
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="upload-title">Material Title</label>
+                    <input type="text" id="upload-title" placeholder="e.g., Introduction to Python" required />
+                    <span class="error-message">Please enter a valid title (letters, numbers, spaces only).</span>
+                </div>
+                <div class="form-group">
+                    <label for="upload-description">Description</label>
+                    <textarea id="upload-description" placeholder="Describe the material..." required></textarea>
+                    <span class="error-message">Please enter a description.</span>
+                </div>
+                <div class="form-group">
+                    <label for="upload-university">University</label>
+                    <select id="upload-university" required>
+                        <option value="" disabled selected>Select University</option>
+                        <option value="PPU">PPU</option>
+                        <option value="AKU">AKU</option>
+                    </select>
+                    <span class="error-message">Please select a university.</span>
+                </div>
+                <div class="form-group">
+                    <label for="upload-year">Year/Semester</label>
+                    <select id="upload-year" required>
+                        <option value="" disabled selected>Select Year/Semester</option>
+                    </select>
+                    <span class="error-message">Please select a year or semester.</span>
+                </div>
+                <div class="form-group">
+                    <label for="upload-faculty">Faculty</label>
+                    <select id="upload-faculty" required>
+                        <option value="" disabled selected>Select Faculty</option>
+                        <option value="Sanjeev Sir">Sanjeev Sir</option>
+                        <option value="Raju Sir">Raju Sir</option>
+                        <option value="Amit Shukla Sir">Amit Shukla Sir</option>
+                        <option value="Poddar Sir">Poddar Sir</option>
+                    </select>
+                    <span class="error-message">Please select a faculty.</span>
+                </div>
+                <div class="form-group">
+                    <label for="upload-subject">Subject</label>
+                    <select id="upload-subject" required>
+                        <option value="" disabled selected>Select Subject</option>
+                        <option value="Internet & Web Designing">Internet & Web Designing</option>
+                        <option value="SQL Server">SQL Server</option>
+                        <option value="Java Programming">Java Programming</option>
+                        <option value="Visual Basic">Visual Basic</option>
+                        <option value="English Communication">English Communication</option>
+                        <option value="Python">Python</option>
+                        <option value="Data Structures">Data Structures</option>
+                        <option value="Operating Systems">Operating Systems</option>
+                    </select>
+                    <span class="error-message">Please select a subject.</span>
+                </div>
+                <div class="form-group">
+                    <label for="upload-file">Material File (PDF only)</label>
+                    <input type="file" id="upload-file" accept=".pdf" required />
+                    <span class="error-message">Please select a valid PDF file.</span>
+                </div>
+                <button type="submit" class="submit-button"><span>Upload Material</span></button>
+            </form>
+        </div>
+
+        <div class="tab-content" id="view">
+            <div class="filters">
+                <select class="filter-select" id="view-university">
+                    <option value="">Select University</option>
+                    <option value="PPU">PPU</option>
+                    <option value="AKU">AKU</option>
+                </select>
+                <select class="filter-select" id="view-yearSemester">
+                    <option value="">Select Year/Semester</option>
+                </select>
+                <select class="filter-select" id="view-faculty">
+                    <option value="">Select Faculty</option>
+                </select>
+                <select class="filter-select" id="view-subject">
+                    <option value="">Select Subject</option>
+                </select>
+            </div>
+            <div class="material-grid" id="viewMaterials"></div>
+        </div>
+
+        <!-- PDF View Modal -->
+        <div class="modal" id="pdfModal">
+            <div class="modal-content pdf-modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Viewing PDF</h2>
+                    <button class="close-modal" onclick="closeModal()">Close</button>
+                </div>
+                <div class="modal-body pdf-modal-body">
+                    <div class="loading" id="pdfLoading">Loading PDF...</div>
+                    <iframe id="pdfViewer" src="" onload="hideLoading()"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Material Modal -->
+        <div class="modal" id="editModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Edit Material</h2>
+                    <button class="close-modal" onclick="closeEditModal()">Close</button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <input type="hidden" id="edit-id" />
+                        <input type="hidden" id="edit-isHardcoded" />
+                        <div class="form-group">
+                            <label for="edit-title">Material Title</label>
+                            <input type="text" id="edit-title" placeholder="Enter lecture title" required />
+                            <span class="error-message">Please enter a valid title (letters, numbers, spaces only).</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-description">Description</label>
+                            <textarea id="edit-description" placeholder="Describe the material" required></textarea>
+                            <span class="error-message">Please enter a description.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-university">University</label>
+                            <select id="edit-university" required>
+                                <option value="" disabled>Select University</option>
+                                <option value="PPU">PPU</option>
+                                <option value="AKU">AKU</option>
+                            </select>
+                            <span class="error-message">Please select a university.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-year">Year/Semester</label>
+                            <select id="edit-year" required>
+                                <option value="" disabled>Select Year/Semester</option>
+                            </select>
+                            <span class="error-message">Please select a year or semester.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-faculty">Faculty</label>
+                            <select id="edit-faculty" required>
+                                <option value="" disabled>Select Faculty</option>
+                                <option value="Sanjeev Sir">Sanjeev Sir</option>
+                                <option value="Raju Sir">Raju Sir</option>
+                                <option value="Amit Shukla Sir">Amit Shukla Sir</option>
+                                <option value="Poddar Sir">Poddar Sir</option>
+                            </select>
+                            <span class="error-message">Please select a faculty.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-subject">Subject</label>
+                            <select id="edit-subject" required>
+                                <option value="" disabled>Select Subject</option>
+                                <option value="Internet & Web Designing">Internet & Web Designing</option>
+                                <option value="SQL Server">SQL Server</option>
+                                <option value="Java Programming">Java Programming</option>
+                                <option value="Visual Basic">Visual Basic</option>
+                                <option value="English Communication">English Communication</option>
+                                <option value="Python">Python</option>
+                                <option value="Data Structures">Data Structures</option>
+                                <option value="Operating Systems">Operating Systems</option>
+                            </select>
+                            <span class="error-message">Please select a subject.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-file">Material File (PDF only, optional)</label>
+                            <input type="file" id="edit-file" accept=".pdf" />
+                            <span class="error-message">Please select a valid PDF file.</span>
+                        </div>
+                        <button type="submit" class="submit-button"><span>Save Changes</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Hardcoded materials from study-material.html
+        const defaultMaterialsData = {
+            "PPU": {
+                "Part 1": {
+                    "Poddar Sir": {
+                        courses: {
+                            "English Communication": [
+                                { id: 10, title: "English Speaking Tips", description: "English speaking fluency tips", file: "ppu/part1/poddar/englishcommunication.pdf", type: "pdf", uploaded: "2022-03-22" }
+                            ]
+                        }
+                    }
+                },
+                "Part 2": {},
+                "Part 3": {
+                    "Sanjeev Sir": {
+                        courses: {
+                            "Internet & Web Designing": [
+                                { id: 1, title: "Introduction to Internet & Applications", description: "Basics of internet and its applications", file: "ppu/part3/sanjeev/Introduction_to_Internet_and_Applications.pdf", type: "pdf", uploaded: "2025-05-27" },
+                                { id: 2, title: "Internet Protocols", description: "Overview of internet protocols", file: "ppu/part3/sanjeev/Internet_Protocols_Email.pdf", type: "pdf", uploaded: "2025-06-02" },
+                                { id: 3, title: "HTML Basics", description: "Fundamentals of HTML", file: "ppu/part3/sanjeev/HTML_Basics_Presentation.pdf", type: "pdf", uploaded: "2025-06-07" },
+                                { id: 6, title: "Internet Connection: Dialup vs Leased Line", description: "Comparison of dial-up and leased line connections", file: "ppu/part3/sanjeev/Internet_Connection_Dialup_vs_LeasedLine.pdf", type: "pdf", uploaded: "2025-06-15" },
+                                { id: 7, title: "Email and FTP Services", description: "Overview of email and FTP services", file: "ppu/part3/sanjeev/Email_and_FTP_Services_Presentation.pdf", type: "pdf", uploaded: "2025-06-15" },
+                                { id: 8, title: "Internet Services and mIRC", description: "Introduction to internet services and mIRC", file: "ppu/part3/sanjeev/Internet_Services_and_mIRC_Presentation_5.pdf", type: "pdf", uploaded: "2025-06-15" },
+                                { id: 14, title: "ASP and Importance in HTML", description: "Overview of ASP and its importance in HTML", file: "ppu/part3/sanjeev/ASP_and_Importance_in_HTML.pdf", type: "pdf", uploaded: "2025-06-19" }
+                            ]
+                        }
+                    },
+                    "Raju Sir": {
+                        courses: {
+                            "SQL Server": [
+                                { id: 4, title: "Introduction to SQL Server", description: "Basics of SQL queries", file: "ppu/part3/raju/Introduction_to_SQL_Server_Datatypes.pdf", type: "pdf", uploaded: "2025-06-05" },
+                                { id: 5, title: "DQL Query", description: "Data Query Language (DQL)", file: "ppu/part3/raju/Data_Query_Language(DQL).pdf", type: "pdf", uploaded: "2025-06-10" }
+                            ],
+                            "Java Programming": [
+                                { id: 10, title: "Java Programming", description: "Introduction to Java programming", file: "ppu/part3/raju/Java_Evolution_OverviewOfJava.pdf", type: "pdf", uploaded: "2025-06-15" }
+                            ]
+                        }
+                    },
+                    "Amit Shukla Sir": {
+                        courses: {
+                            "Visual Basic": [
+                                { id: 9, title: "Visual Programming with VB", description: "Introduction to visual programming using Visual Basic", file: "ppu/part3/amit/visual_programming_with_VB.pdf", type: "pdf", uploaded: "2025-06-16" },
+                                { id: 13, title: "Structure Of a Visual Basic Application", description: "A detailed structure of a Visual Basic application", file: "ppu/part3/amit/structure_of_a_visual_basic_application.pdf", type: "pdf", uploaded: "2025-06-19" }
+                            ]
+                        }
+                    }
+                }
+            },
+            "AKU": {}
+        };
+
+        // Deep merge function to combine default and stored materials
+        function deepMerge(target, source) {
+            for (const key in source) {
+                if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+                    if (!target[key]) target[key] = {};
+                    deepMerge(target[key], source[key]);
+                } else if (Array.isArray(source[key])) {
+                    if (!target[key]) target[key] = [];
+                    target[key] = [...target[key], ...source[key]];
+                } else {
+                    target[key] = source[key];
+                }
+            }
+            return target;
+        }
+
+        // Load and merge materials data
+        let materialsData = JSON.parse(JSON.stringify(defaultMaterialsData));
+        const storedMaterials = JSON.parse(localStorage.getItem('materialsData')) || {};
+        materialsData = deepMerge(materialsData, storedMaterials);
+
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                console.log('Tab clicked:', tab.dataset.tab);
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                const content = document.getElementById(tab.dataset.tab);
+                if (content) {
+                    content.classList.add('active');
+                    if (tab.dataset.tab === 'view') {
+                        console.log('View tab activated, updating materials');
+                        updateViewMaterials();
+                    }
+                } else {
+                    console.error('Tab content not found for:', tab.dataset.tab);
+                }
+            });
+        });
+
+        // Upload form handling
+        const uploadForm = document.getElementById('uploadForm');
+        const uploadUniversity = document.getElementById('upload-university');
+        const uploadYear = document.getElementById('upload-year');
+
+        uploadUniversity.addEventListener('change', () => {
+            console.log('Upload university changed:', uploadUniversity.value);
+            const selectedUniversity = uploadUniversity.value;
+            uploadYear.innerHTML = '<option value="" disabled selected>Select Year/Semester</option>';
+            if (selectedUniversity === 'PPU') {
+                ['Part 1', 'Part 2', 'Part 3'].forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    uploadYear.appendChild(option);
+                });
+            } else if (selectedUniversity === 'AKU') {
+                ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5', 'Semester 6'].forEach(sem => {
+                    const option = document.createElement('option');
+                    option.value = sem;
+                    option.textContent = sem;
+                    uploadYear.appendChild(option);
+                });
+            }
+        });
+
+        uploadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('upload-title').value.trim();
+            const description = document.getElementById('upload-description').value.trim();
+            const university = document.getElementById('upload-university').value;
+            const yearSemester = document.getElementById('upload-year').value;
+            const faculty = document.getElementById('upload-faculty').value;
+            const subject = document.getElementById('upload-subject').value;
+            const fileInput = document.getElementById('upload-file');
+            const submitButton = uploadForm.querySelector('.submit-button');
+
+            document.querySelectorAll('#uploadForm .form-group').forEach(group => group.classList.remove('error'));
+
+            const validTitlePattern = /^[A-Za-z0-9\s]+$/;
+            let errors = [];
+            if (!title || !validTitlePattern.test(title)) errors.push({ element: 'upload-title', message: 'Please enter a valid title (letters, numbers, spaces only)' });
+            if (!description) errors.push({ element: 'upload-description', message: 'Please enter a description' });
+            if (!university) errors.push({ element: 'upload-university', message: 'Please select a university' });
+            if (!yearSemester) errors.push({ element: 'upload-year', message: 'Please select a year or semester' });
+            if (!faculty) errors.push({ element: 'upload-faculty', message: 'Please select a faculty' });
+            if (!subject) errors.push({ element: 'upload-subject', message: 'Please select a subject' });
+            if (!fileInput.files[0] || fileInput.files[0].type !== 'application/pdf') errors.push({ element: 'upload-file', message: 'Please select a valid PDF file' });
+            if (fileInput.files[0] && fileInput.files[0].size > 5 * 1024 * 1024) errors.push({ element: 'upload-file', message: 'PDF must be under 5MB' });
+
+            if (errors.length > 0) {
+                errors.forEach(error => {
+                    const group = document.getElementById(error.element).parentElement;
+                    group.classList.add('error');
+                    group.querySelector('.error-message').textContent = error.message;
+                });
+                alert('Please fix the errors in the form.');
+                return;
+            }
+
+            submitButton.classList.add('loading');
+            submitButton.disabled = true;
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                const newMaterial = {
+                    id: Date.now(),
+                    title,
+                    description,
+                    file: reader.result,
+                    type: 'pdf',
+                    uploaded: new Date().toISOString().split('T')[0]
+                };
+
+                let storedMaterials = JSON.parse(localStorage.getItem('materialsData')) || {};
+                if (!storedMaterials[university]) storedMaterials[university] = {};
+                if (!storedMaterials[university][yearSemester]) storedMaterials[university][yearSemester] = {};
+                if (!storedMaterials[university][yearSemester][faculty]) storedMaterials[university][yearSemester][faculty] = { courses: {} };
+                if (!storedMaterials[university][yearSemester][faculty].courses[subject]) storedMaterials[university][yearSemester][faculty].courses[subject] = [];
+                storedMaterials[university][yearSemester][faculty].courses[subject].push(newMaterial);
+
+                localStorage.setItem('materialsData', JSON.stringify(storedMaterials));
+                materialsData = deepMerge(JSON.parse(JSON.stringify(defaultMaterialsData)), storedMaterials);
+
+                alert('Material uploaded successfully!');
+                submitButton.classList.remove('loading');
+                submitButton.disabled = false;
+                uploadForm.reset();
+                uploadYear.innerHTML = '<option value="" disabled selected>Select Year/Semester</option>';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // View materials
+        const viewUniversity = document.getElementById('view-university');
+        const viewYearSemester = document.getElementById('view-yearSemester');
+        const viewFaculty = document.getElementById('view-faculty');
+        const viewSubject = document.getElementById('view-subject');
+        const viewMaterials = document.getElementById('viewMaterials');
+        const pdfModal = document.getElementById('pdfModal');
+        const pdfViewer = document.getElementById('pdfViewer');
+        const modalTitle = document.getElementById('modalTitle');
+        const pdfLoading = document.getElementById('pdfLoading');
+        const editModal = document.getElementById('editModal');
+        const editUniversity = document.getElementById('edit-university');
+        const editYear = document.getElementById('edit-year');
+
+        viewUniversity.addEventListener('change', () => {
+            console.log('View university changed:', viewUniversity.value);
+            viewYearSemester.innerHTML = '<option value="">Select Year/Semester</option>';
+            viewFaculty.innerHTML = '<option value="">Select Faculty</option>';
+            viewSubject.innerHTML = '<option value="">Select Subject</option>';
+            if (viewUniversity.value && materialsData[viewUniversity.value]) {
+                Object.keys(materialsData[viewUniversity.value]).forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    viewYearSemester.appendChild(option);
+                });
+            }
+            updateViewMaterials();
+        });
+
+        viewYearSemester.addEventListener('change', () => {
+            console.log('View year/semester changed:', viewYearSemester.value);
+            viewFaculty.innerHTML = '<option value="">Select Faculty</option>';
+            viewSubject.innerHTML = '<option value="">Select Subject</option>';
+            if (viewUniversity.value && viewYearSemester.value && materialsData[viewUniversity.value]?.[viewYearSemester.value]) {
+                Object.keys(materialsData[viewUniversity.value][viewYearSemester.value]).forEach(fac => {
+                    const option = document.createElement('option');
+                    option.value = fac;
+                    option.textContent = fac;
+                    viewFaculty.appendChild(option);
+                });
+            }
+            updateViewMaterials();
+        });
+
+        viewFaculty.addEventListener('change', () => {
+            console.log('View faculty changed:', viewFaculty.value);
+            viewSubject.innerHTML = '<option value="">Select Subject</option>';
+            if (viewUniversity.value && viewYearSemester.value && viewFaculty.value && materialsData[viewUniversity.value]?.[viewYearSemester.value]?.[viewFaculty.value]) {
+                Object.keys(materialsData[viewUniversity.value][viewYearSemester.value][viewFaculty.value].courses).forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub;
+                    option.textContent = sub;
+                    viewSubject.appendChild(option);
+                });
+            }
+            updateViewMaterials();
+        });
+
+        viewSubject.addEventListener('change', () => {
+            console.log('View subject changed:', viewSubject.value);
+            updateViewMaterials();
+        });
+
+        function updateViewMaterials() {
+            console.log('Updating view materials');
+            const selectedUniversity = viewUniversity.value;
+            const selectedYearSemester = viewYearSemester.value;
+            const selectedFaculty = viewFaculty.value;
+            const selectedSubject = viewSubject.value;
+            viewMaterials.innerHTML = '';
+
+            let found = false;
+
+            Object.keys(materialsData).forEach(university => {
+                Object.keys(materialsData[university]).forEach(yearSemester => {
+                    Object.keys(materialsData[university][yearSemester]).forEach(faculty => {
+                        Object.keys(materialsData[university][yearSemester][faculty].courses).forEach(subject => {
+                            const materials = materialsData[university][yearSemester][faculty].courses[subject];
+                            if (
+                                (!selectedUniversity || selectedUniversity === university) &&
+                                (!selectedYearSemester || selectedYearSemester === yearSemester) &&
+                                (!selectedFaculty || selectedFaculty === faculty) &&
+                                (!selectedSubject || selectedSubject === subject)
+                            ) {
+                                materials.forEach(material => {
+                                    console.log(`Creating card for material: ${material.title}`);
+                                    createMaterialCard(material, university, yearSemester, faculty, subject);
+                                    found = true;
+                                });
+                            }
+                        });
+                    });
+                });
+            });
+
+            if (!found) {
+                viewMaterials.innerHTML = '<div style="text-align:center;color:#ef4444;font-weight:500;">No materials found for selected filters.</div>';
+            } else if (!selectedUniversity) {
+                viewMaterials.innerHTML = '<div style="text-align:center;color:#4b5e7a;font-weight:500;">Please select a university to view materials.</div>';
+            }
+            console.log('Materials found:', found);
+        }
+
+        function createMaterialCard(material, university, yearSemester, faculty, subject) {
+            console.log(`Creating material card: ${material.title}, ID: ${material.id}, Path: ${university}/${yearSemester}/${faculty}/${subject}`);
+            const card = document.createElement('div');
+            card.className = 'material-card';
+            card.innerHTML = `
+                <h3 class="material-title">${material.title}</h3>
+                <p class="material-description">${material.description}</p>
+                <p class="material-meta">Uploaded: ${material.uploaded} | Type: PDF</p>
+                <div class="action-buttons">
+                    <button class="action-button view-btn" onclick="viewMaterial('${material.file}', '${material.title}')">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="action-button edit-btn" onclick="openEditModal(${material.id}, '${university}', '${yearSemester}', '${faculty}', '${subject}')">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="action-button delete-btn" onclick="deleteMaterial(${material.id}, '${university}', '${yearSemester}', '${faculty}', '${subject}')">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            `;
+            viewMaterials.appendChild(card);
+        }
+
+        function viewMaterial(file, title) {
+            console.log('Viewing material:', title);
+            if (!file) {
+                alert("File path is invalid!");
+                return;
+            }
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                window.open(file, '_blank');
+            } else {
+                pdfLoading.style.display = 'block';
+                pdfViewer.src = file;
+                modalTitle.textContent = title;
+                pdfModal.style.display = 'flex';
+            }
+        }
+
+        function hideLoading() {
+            pdfLoading.style.display = 'none';
+        }
+
+        function closeModal() {
+            pdfModal.style.display = 'none';
+            pdfViewer.src = '';
+            pdfLoading.style.display = 'none';
+        }
+
+        pdfModal.addEventListener('click', (event) => {
+            if (event.target === pdfModal) {
+                closeModal();
+            }
+        });
+
+        // Edit modal handling
+        editUniversity.addEventListener('change', () => {
+            console.log('Edit university changed:', editUniversity.value);
+            const selectedUniversity = editUniversity.value;
+            editYear.innerHTML = '<option value="" disabled>Select Year/Semester</option>';
+            if (selectedUniversity === 'PPU') {
+                ['Part 1', 'Part 2', 'Part 3'].forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    editYear.appendChild(option);
+                });
+            } else if (selectedUniversity === 'AKU') {
+                ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5', 'Semester 6'].forEach(sem => {
+                    const option = document.createElement('option');
+                    option.value = sem;
+                    option.textContent = sem;
+                    editYear.appendChild(option);
+                });
+            }
+        });
+
+        function openEditModal(id, university, yearSemester, faculty, subject) {
+            console.log(`Opening edit modal for ID: ${id}, Path: ${university}/${yearSemester}/${faculty}/${subject}`);
+            const material = materialsData[university]?.[yearSemester]?.[faculty]?.courses?.[subject]?.find(m => m.id === id);
+            if (material) {
+                const isHardcoded = !material.file.startsWith('data:application/pdf');
+                document.getElementById('edit-id').value = id;
+                document.getElementById('edit-isHardcoded').value = isHardcoded ? 'true' : 'false';
+                document.getElementById('edit-title').value = material.title || '';
+                document.getElementById('edit-description').value = material.description || '';
+                document.getElementById('edit-university').value = university || '';
+                editUniversity.dispatchEvent(new Event('change'));
+                document.getElementById('edit-year').value = yearSemester || '';
+                document.getElementById('edit-faculty').value = faculty || '';
+                document.getElementById('edit-subject').value = subject || '';
+                editModal.style.display = 'flex';
+                if (isHardcoded) {
+                    alert('Note: Editing hardcoded materials will save changes to localStorage, but original files cannot be modified without a backend.');
+                }
+            } else {
+                console.error(`Material not found for ID: ${id}`);
+                alert('Material not found!');
+            }
+        }
+
+        function closeEditModal() {
+            console.log('Closing edit modal');
+            editModal.style.display = 'none';
+            document.getElementById('editForm').reset();
+            document.getElementById('edit-year').innerHTML = '<option value="" disabled>Select Year/Semester</option>';
+            document.querySelectorAll('#editForm .form-group').forEach(group => group.classList.remove('error'));
+        }
+
+        editModal.addEventListener('click', (event) => {
+            if (event.target === editModal) {
+                closeEditModal();
+            }
+        });
+
+        const editForm = document.getElementById('editForm');
+        editForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('Edit form submitted');
+            const id = parseInt(document.getElementById('edit-id').value);
+            const isHardcoded = document.getElementById('edit-isHardcoded').value === 'true';
+            const title = document.getElementById('edit-title').value.trim();
+            const description = document.getElementById('edit-description').value.trim();
+            const university = document.getElementById('edit-university').value;
+            const yearSemester = document.getElementById('edit-year').value;
+            const faculty = document.getElementById('edit-faculty').value;
+            const subject = document.getElementById('edit-subject').value;
+            const fileInput = document.getElementById('edit-file');
+            const submitButton = editForm.querySelector('.submit-button');
+
+            document.querySelectorAll('#editForm .form-group').forEach(group => group.classList.remove('error'));
+
+            const validTitlePattern = /^[A-Za-z0-9\s]+$/;
+            let errors = [];
+            if (!title || !validTitlePattern.test(title)) errors.push({ element: 'edit-title', message: 'Please enter a valid title (letters, numbers, spaces only)' });
+            if (!description) errors.push({ element: 'edit-description', message: 'Please enter a description' });
+            if (!university) errors.push({ element: 'edit-university', message: 'Please select a university' });
+            if (!yearSemester) errors.push({ element: 'edit-year', message: 'Please select a year or semester' });
+            if (!faculty) errors.push({ element: 'edit-faculty', message: 'Please select a faculty' });
+            if (!subject) errors.push({ element: 'edit-subject', message: 'Please select a subject' });
+            if (fileInput.files[0] && fileInput.files[0].type !== 'application/pdf') errors.push({ element: 'edit-file', message: 'Please select a valid PDF file' });
+            if (fileInput.files[0] && fileInput.files[0].size > 5 * 1024 * 1024) errors.push({ element: 'edit-file', message: 'PDF must be under 5MB' });
+
+            if (errors.length > 0) {
+                errors.forEach(error => {
+                    const group = document.getElementById(error.element).parentElement;
+                    group.classList.add('error');
+                    group.querySelector('.error-message').textContent = error.message;
+                });
+                alert('Please fix the errors in the form.');
+                return;
+            }
+
+            submitButton.classList.add('loading');
+            submitButton.disabled = true;
+
+            let storedMaterials = JSON.parse(localStorage.getItem('materialsData')) || {};
+            let oldPath = null;
+
+            Object.keys(materialsData).forEach(u => {
+                Object.keys(materialsData[u]).forEach(y => {
+                    Object.keys(materialsData[u][y]).forEach(f => {
+                        Object.keys(materialsData[u][y][f].courses).forEach(s => {
+                            const index = materialsData[u][y][f].courses[s].findIndex(m => m.id === id);
+                            if (index !== -1) {
+                                oldPath = { university: u, yearSemester: y, faculty: f, subject: s, index };
+                            }
+                        });
+                    });
+                });
+            });
+
+            if (!oldPath) {
+                console.error('Material path not found for ID:', id);
+                alert('Material path not found!');
+                submitButton.classList.remove('loading');
+                submitButton.disabled = false;
+                return;
+            }
+
+            const updateMaterial = (file) => {
+                const updatedMaterial = {
+                    id,
+                    title,
+                    description,
+                    file: file || materialsData[oldPath.university][oldPath.yearSemester][oldPath.faculty].courses[oldPath.subject][oldPath.index].file,
+                    type: 'pdf',
+                    uploaded: new Date().toISOString().split('T')[0]
+                };
+
+                if (!isHardcoded) {
+                    if (storedMaterials[oldPath.university]?.[oldPath.yearSemester]?.[oldPath.faculty]?.courses?.[oldPath.subject]) {
+                        storedMaterials[oldPath.university][oldPath.yearSemester][oldPath.faculty].courses[oldPath.subject].splice(oldPath.index, 1);
+                        if (storedMaterials[oldPath.university][oldPath.yearSemester][oldPath.faculty].courses[oldPath.subject].length === 0) {
+                            delete storedMaterials[oldPath.university][oldPath.yearSemester][oldPath.faculty].courses[oldPath.subject];
+                        }
+                        if (Object.keys(storedMaterials[oldPath.university][oldPath.yearSemester][oldPath.faculty].courses).length === 0) {
+                            delete storedMaterials[oldPath.university][oldPath.yearSemester][oldPath.faculty];
+                        }
+                        if (Object.keys(storedMaterials[oldPath.university][oldPath.yearSemester]).length === 0) {
+                            delete storedMaterials[oldPath.university][oldPath.yearSemester];
+                        }
+                        if (Object.keys(storedMaterials[oldPath.university]).length === 0) {
+                            delete storedMaterials[oldPath.university];
+                        }
+                    }
+                }
+
+                if (!storedMaterials[university]) storedMaterials[university] = {};
+                if (!storedMaterials[university][yearSemester]) storedMaterials[university][yearSemester] = {};
+                if (!storedMaterials[university][yearSemester][faculty]) storedMaterials[university][yearSemester][faculty] = { courses: {} };
+                if (!storedMaterials[university][yearSemester][faculty].courses[subject]) storedMaterials[university][yearSemester][faculty].courses[subject] = [];
+                storedMaterials[university][yearSemester][faculty].courses[subject].push(updatedMaterial);
+
+                localStorage.setItem('materialsData', JSON.stringify(storedMaterials));
+                materialsData = deepMerge(JSON.parse(JSON.stringify(defaultMaterialsData)), storedMaterials);
+
+                alert('Material updated successfully!');
+                submitButton.classList.remove('loading');
+                submitButton.disabled = false;
+                closeEditModal();
+                updateViewMaterials();
+            };
+
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    updateMaterial(reader.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                updateMaterial();
+            }
+        });
+
+        function deleteMaterial(id, university, yearSemester, faculty, subject) {
+            console.log(`Deleting material ID: ${id} from ${university}/${yearSemester}/${faculty}/${subject}`);
+            if (!confirm('Are you sure you want to delete this material?')) return;
+
+            let storedMaterials = JSON.parse(localStorage.getItem('materialsData')) || {};
+            const isHardcoded = !materialsData[university]?.[yearSemester]?.[faculty]?.courses?.[subject]?.find(m => m.id === id)?.file?.startsWith('data:application/pdf');
+
+            if (isHardcoded) {
+                alert('Cannot delete hardcoded material permanently without a backend. It will be removed from this session only.');
+                const index = materialsData[university][yearSemester][faculty].courses[subject].findIndex(m => m.id === id);
+                if (index !== -1) {
+                    materialsData[university][yearSemester][faculty].courses[subject].splice(index, 1);
+                    if (materialsData[university][yearSemester][faculty].courses[subject].length === 0) {
+                        delete materialsData[university][yearSemester][faculty].courses[subject];
+                    }
+                    updateViewMaterials();
+                }
+                return;
+            }
+
+            let found = false;
+            if (storedMaterials[university]?.[yearSemester]?.[faculty]?.courses?.[subject]) {
+                const index = storedMaterials[university][yearSemester][faculty].courses[subject].findIndex(m => m.id === id);
+                if (index !== -1) {
+                    storedMaterials[university][yearSemester][faculty].courses[subject].splice(index, 1);
+                    if (storedMaterials[university][yearSemester][faculty].courses[subject].length === 0) {
+                        delete storedMaterials[university][yearSemester][faculty].courses[subject];
+                    }
+                    if (Object.keys(storedMaterials[university][yearSemester][faculty].courses).length === 0) {
+                        delete storedMaterials[university][yearSemester][faculty];
+                    }
+                    if (Object.keys(storedMaterials[university][yearSemester]).length === 0) {
+                        delete storedMaterials[university][yearSemester];
+                    }
+                    if (Object.keys(storedMaterials[university]).length === 0) {
+                        delete storedMaterials[university];
+                    }
+                    found = true;
+                }
+            }
+
+            if (found) {
+                localStorage.setItem('materialsData', JSON.stringify(storedMaterials));
+                materialsData = deepMerge(JSON.parse(JSON.stringify(defaultMaterialsData)), storedMaterials);
+                alert('Material deleted successfully!');
+                updateViewMaterials();
+            } else {
+                console.error(`Material not found for deletion: ID ${id}`);
+                alert('Material not found or cannot be deleted!');
+            }
+        }
+    </script>
+</body>
+</html>

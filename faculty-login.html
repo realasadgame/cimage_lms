@@ -2,146 +2,372 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Faculty Login - CIMAGE</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty Login - CIMAGE College</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --primary: #2ecc71;
-      --primary-dark: #27ae60;
-      --text: #2c3e50;
-      --bg: #f5f6fa;
-      --border: #dfe6e9;
-    }
-
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #667eea, #764ba2);
-      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a3c5e 0%, #2c5282 100%);
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 100vh;
       padding: 1rem;
+      color: #333;
     }
 
     .login-container {
-      background: #fff;
-      padding: 2.8rem 2.2rem;
+      background: #ffffff;
+      padding: 2.5rem;
       border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      max-width: 480px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .login-header {
       text-align: center;
-      margin-bottom: 2.4rem;
+      margin-bottom: 2rem;
+    }
+
+    .login-header img {
+      width: 120px;
+      margin-bottom: 1rem;
     }
 
     .login-header h1 {
-      font-size: 1.9rem;
-      color: var(--text);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #1a3c5e;
     }
 
     .login-header p {
-      font-size: 1rem;
-      color: #555;
-      margin-top: 0.4rem;
-      letter-spacing: 0.3px;
+      font-size: 0.95rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
     }
 
     .form-group {
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.5rem;
+      position: relative;
     }
 
     .form-group label {
       display: block;
-      margin-bottom: 0.6rem;
-      color: var(--text);
-      font-weight: 600;
-      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #374151;
     }
 
     .form-group input {
       width: 100%;
-      padding: 1rem 1rem;
-      border: 1.5px solid var(--border);
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border: 1px solid #d1d5db;
       border-radius: 8px;
-      font-size: 1rem;
-      background: var(--bg);
+      font-size: 0.95rem;
+      background: #f9fafb;
+      color: #111827;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
       outline: none;
+    }
+
+    .form-group input::placeholder {
+      color: #9ca3af;
+    }
+
+    .form-group i {
+      position: absolute;
+      left: 0.75rem;
+      top: 2.4rem;
+      color: #6b7280;
+      font-size: 1rem;
+      transition: color 0.2s ease;
+    }
+
+    .form-group input:focus + i {
+      color: #2563eb;
+    }
+
+    .form-group.error input {
+      border-color: #dc2626;
+    }
+
+    .form-group.error .error-message {
+      display: block;
+      color: #dc2626;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+
+    .error-message {
+      display: none;
     }
 
     .login-button {
       width: 100%;
-      padding: 1rem;
+      padding: 0.85rem;
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 500;
       border: none;
       border-radius: 8px;
-      background: linear-gradient(45deg, var(--primary), var(--primary-dark));
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 600;
       cursor: pointer;
-      transition: 0.3s;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .login-button:hover {
-      opacity: 0.9;
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .login-button:active {
+      transform: translateY(0);
+    }
+
+    .login-button.loading::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .login-button.loading span {
+      opacity: 0;
+    }
+
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .links-group {
+      margin-top: 1.5rem;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+    }
+
+    .links-group a {
+      text-decoration: none;
+      color: #2563eb;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.2s ease;
+    }
+
+    .links-group a:hover {
+      color: #1d4ed8;
     }
 
     .back-link {
       display: block;
-      margin-top: 2rem;
       text-align: center;
+      margin-top: 1.5rem;
+      color: #6b7280;
       font-size: 0.9rem;
+      font-weight: 500;
       text-decoration: none;
-      color: var(--primary);
-      font-weight: 600;
+      transition: color 0.2s ease;
     }
 
     .back-link:hover {
-      color: var(--primary-dark);
+      color: #2563eb;
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 1.5rem;
+        max-width: 95%;
+      }
+
+      .login-header img {
+        width: 100px;
+      }
+
+      .login-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .login-header p {
+        font-size: 0.85rem;
+      }
+
+      .form-group input {
+        padding: 0.65rem 1rem 0.65rem 2.25rem;
+      }
+
+      .form-group i {
+        top: 2.3rem;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="login-container">
     <div class="login-header">
+      <img src="cimagelogo.png" alt="CIMAGE College Logo" />
       <h1>Faculty Login</h1>
-      <p>Welcome, Educator.</p>
+      <p>Access your CIMAGE faculty dashboard</p>
     </div>
 
     <form id="loginForm">
       <div class="form-group">
-        <label for="username">Faculty ID</label>
-        <input type="text" id="username" required placeholder="Enter Faculty ID">
+        <label for="facultyId">Faculty ID</label>
+        <i class="fas fa-user"></i>
+        <input type="text" id="facultyId" required placeholder="Enter your Faculty ID" />
+        <span class="error-message">Please enter a valid Faculty ID</span>
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" required placeholder="Enter Password">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" required placeholder="Enter your Password" />
+        <span class="error-message">Please enter a valid password</span>
       </div>
 
-      <button type="submit" class="login-button">Login</button>
+      <button type="submit" class="login-button"><span>Sign In</span></button>
     </form>
+
+    <div class="links-group">
+      <a href="faculty-recovery.html">Forgot Password?</a>
+      <a href="new-faculty.html">Register as New Faculty</a>
+    </div>
 
     <a href="index.html" class="back-link">← Back to Home</a>
   </div>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      alert('Login successful!');
+      
+      const facultyId = document.getElementById('facultyId').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const facultyIdGroup = document.getElementById('facultyId').parentElement;
+      const passwordGroup = document.getElementById('password').parentElement;
+      const loginButton = document.querySelector('.login-button');
+
+      // Reset error states
+      facultyIdGroup.classList.remove('error');
+      passwordGroup.classList.remove('error');
+      loginButton.classList.add('loading');
+      loginButton.disabled = true;
+
+      // Basic validation
+      let hasError = false;
+
+      if (!facultyId) {
+        facultyIdGroup.classList.add('error');
+        hasError = true;
+      }
+      if (!password) {
+        passwordGroup.classList.add('error');
+        hasError = true;
+      }
+
+      if (hasError) {
+        loginButton.classList.remove('loading');
+        loginButton.disabled = false;
+        return;
+      }
+
+      // Check credentials
+      const isFacultyIdValid = facultyId === '444';
+      const isPasswordValid = password === 'cimagepatna';
+
+      if (isFacultyIdValid && isPasswordValid) {
+        try {
+          console.log('Attempting redirect to faculty.html');
+          // Store faculty data in localStorage for dashboard
+          localStorage.setItem('facultyData', JSON.stringify({
+            name: 'Dr. John Doe',
+            id: facultyId,
+            email: 'john.doe@cimage.in',
+            contact: '9876543210'
+          }));
+          window.location.href = 'faculty.html';
+        } catch (err) {
+          console.error('Redirect failed:', err);
+          alert('Error redirecting to dashboard. Please try again.');
+          loginButton.classList.remove('loading');
+          loginButton.disabled = false;
+        }
+      } else {
+        if (!isFacultyIdValid) {
+          facultyIdGroup.classList.add('error');
+        }
+        if (!isPasswordValid) {
+          passwordGroup.classList.add('error');
+        }
+        alert('Invalid Faculty ID or Password');
+        loginButton.classList.remove('loading');
+        loginButton.disabled = false;
+      }
     });
+
+    // Disable Right Click
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+    // Disable common inspect/view-source shortcuts
+    document.onkeydown = function (e) {
+      // Keys to block
+      const blockedCombos = [
+        e.key === "F12",
+        e.ctrlKey && e.shiftKey && ["I", "J", "C", "K"].includes(e.key),
+        e.ctrlKey && ["U", "S", "A"].includes(e.key),
+        e.metaKey && ["S", "A"].includes(e.key),
+        e.key === "PrintScreen"
+      ];
+
+      if (blockedCombos.some(condition => condition)) {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    // Disable Ctrl+A, Ctrl+S, Ctrl+U separately (more aggressive)
+    document.addEventListener("keydown", function (e) {
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        ["a", "s", "u"].includes(e.key.toLowerCase())
+      ) {
+        e.preventDefault();
+      }
+    });
+
+    // Disable page source drag/selection
+    document.addEventListener("selectstart", e => e.preventDefault());
+    document.addEventListener("dragstart", e => e.preventDefault());
   </script>
 </body>
 </html>

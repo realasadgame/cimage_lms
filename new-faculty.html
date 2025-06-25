@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Faculty Login Request - CIMAGE College</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a3c5e 0%, #2c5282 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+      color: #333;
+    }
+
+    .request-container {
+      background: #ffffff;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      max-width: 480px;
+      width: 100%;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .request-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .request-header img {
+      width: 120px;
+      margin-bottom: 1rem;
+    }
+
+    .request-header h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #1a3c5e;
+    }
+
+    .request-header p {
+      font-size: 0.95rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #374151;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: #f9fafb;
+      color: #111827;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      outline: none;
+    }
+
+    .form-group input::placeholder, .form-group select::placeholder {
+      color: #9ca3af;
+    }
+
+    .form-group i {
+      position: absolute;
+      left: 0.75rem;
+      top: 2.4rem;
+      color: #6b7280;
+      font-size: 1rem;
+      transition: color 0.2s ease;
+    }
+
+    .form-group input:focus + i, .form-group select:focus + i {
+      color: #2563eb;
+    }
+
+    .form-group.error input, .form-group.error select {
+      border-color: #dc2626;
+    }
+
+    .form-group.error .error-message {
+      display: block;
+      color: #dc2626;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+
+    .error-message {
+      display: none;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 0.85rem;
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-button:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .submit-button:active {
+      transform: translateY(0);
+    }
+
+    .submit-button.loading::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .submit-button.loading span {
+      opacity: 0;
+    }
+
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #6b7280;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: #2563eb;
+    }
+
+    @media (max-width: 480px) {
+      .request-container {
+        padding: 1.5rem;
+        max-width: 95%;
+      }
+
+      .request-header img {
+        width: 100px;
+      }
+
+      .request-header h2 {
+        font-size: 1.5rem;
+      }
+
+      .request-header p {
+        font-size: 0.85rem;
+      }
+
+      .form-group input, .form-group select {
+        padding: 0.65rem 1rem 0.65rem 2.25rem;
+      }
+
+      .form-group i {
+        top: 2.3rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="request-container">
+    <div class="request-header">
+      <img src="cimagelogo.png" alt="CIMAGE College Logo" />
+      <h2>New Faculty Login Request</h2>
+      <p>Fill in your details to request login access. The admin will review and activate your account.</p>
+    </div>
+
+    <form id="loginRequestForm">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <i class="fas fa-user"></i>
+        <input type="text" id="name" required placeholder="e.g., Dr. John Doe" />
+        <span class="error-message">Please enter a valid name (letters and spaces only).</span>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email" required placeholder="e.g., faculty@cimage.in" />
+        <span class="error-message">Please enter a valid email address.</span>
+      </div>
+      <div class="form-group">
+        <label for="contact">Contact Number</label>
+        <i class="fas fa-phone"></i>
+        <input type="text" id="contact" required placeholder="e.g., 9876543210" />
+        <span class="error-message">Please enter a valid 10-digit contact number.</span>
+      </div>
+      <div class="form-group">
+        <label for="department">Department</label>
+        <i class="fas fa-building"></i>
+        <select id="department" required>
+          <option value="" disabled selected>Select your department</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Mathematics">Mathematics</option>
+          <option value="Physics">Physics</option>
+          <option value="Management">Management</option>
+          <option value="Other">Other</option>
+        </select>
+        <span class="error-message">Please select a department.</span>
+      </div>
+      <button type="submit" class="submit-button"><span>Send Request</span></button>
+    </form>
+
+    <a href="faculty-login.html" class="back-link">← Back to Login</a>
+  </div>
+
+  <script>
+    document.getElementById('loginRequestForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const contact = document.getElementById('contact').value.trim();
+      const department = document.getElementById('department').value;
+      
+      const nameGroup = document.getElementById('name').parentElement;
+      const emailGroup = document.getElementById('email').parentElement;
+      const contactGroup = document.getElementById('contact').parentElement;
+      const departmentGroup = document.getElementById('department').parentElement;
+      const submitButton = document.querySelector('.submit-button');
+
+      // Reset error states
+      [nameGroup, emailGroup, contactGroup, departmentGroup].forEach(group => group.classList.remove('error'));
+      submitButton.classList.add('loading');
+      submitButton.disabled = true;
+
+      // Validation patterns
+      const validNamePattern = /^[A-Za-z\s.]+$/;
+      const validEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const validContactPattern = /^\d{10}$/;
+
+      // Validation checks
+      let errorMessages = [];
+
+      if (!name) {
+        errorMessages.push({ group: nameGroup, message: 'Please enter a name' });
+      } else if (!validNamePattern.test(name)) {
+        errorMessages.push({ group: nameGroup, message: 'Please enter a valid name (letters, spaces, and periods only)' });
+      }
+
+      if (!email) {
+        errorMessages.push({ group: emailGroup, message: 'Please enter an email address' });
+      } else if (!validEmailPattern.test(email)) {
+        errorMessages.push({ group: emailGroup, message: 'Please enter a valid email address' });
+      }
+
+      if (!contact) {
+        errorMessages.push({ group: contactGroup, message: 'Please enter a contact number' });
+      } else if (!validContactPattern.test(contact)) {
+        errorMessages.push({ group: contactGroup, message: 'Please enter a valid 10-digit contact number' });
+      }
+
+      if (!department) {
+        errorMessages.push({ group: departmentGroup, message: 'Please select a department' });
+      }
+
+      if (errorMessages.length > 0) {
+        errorMessages.forEach(({ group, message }) => {
+          group.classList.add('error');
+          group.querySelector('.error-message').textContent = message;
+        });
+        alert('Please fix the errors in the form.');
+        submitButton.classList.remove('loading');
+        submitButton.disabled = false;
+        return;
+      }
+
+      // Simulate sending request to admin
+      try {
+        console.log(`Sending login request for Faculty: ${name}, Email: ${email}, Contact: ${contact}, Department: ${department}`);
+        setTimeout(() => {
+          alert(`Request for login access sent for ${name}. Admin will contact you soon with your Faculty ID.`);
+          submitButton.classList.remove('loading');
+          submitButton.disabled = false;
+          document.getElementById('loginRequestForm').reset(); // Clear form
+        }, 1000); // Simulate async processing
+      } catch (err) {
+        console.error('Request submission failed:', err);
+        alert('Error submitting request. Please try again.');
+        submitButton.classList.remove('loading');
+        submitButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
