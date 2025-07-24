@@ -886,41 +886,43 @@
     })();
   </script>
   <!-- //disable right click inspect -->
-  <script>
-    // Disable Right Click
-    document.addEventListener("contextmenu", e => e.preventDefault());
+ <script>
+  // Disable Right Click
+  document.addEventListener("contextmenu", e => e.preventDefault());
 
-    // Disable common inspect/view-source shortcuts
-    document.onkeydown = function (e) {
-      // Keys to block
-      const blockedCombos = [
-        e.key === "F12",
-        e.ctrlKey && e.shiftKey && ["I", "J", "C", "K"].includes(e.key),
-        e.ctrlKey && ["U", "S", "A"].includes(e.key),
-        e.metaKey && ["S", "A"].includes(e.key),
-        e.key === "PrintScreen"
-      ];
+  // Disable common inspect/view-source shortcuts
+  document.addEventListener("keydown", function (e) {
+    const blockedKeys = [
+      "F12",
+      "PrintScreen"
+    ];
 
-      if (blockedCombos.some(condition => condition)) {
-        e.preventDefault();
-        return false;
-      }
-    };
+    const blockedCombos = [
+      e.ctrlKey && e.shiftKey && ["I", "J", "C", "K"].includes(e.key.toUpperCase()),
+      e.ctrlKey && ["U", "S", "A"].includes(e.key.toUpperCase()),
+      e.metaKey && ["S", "A"].includes(e.key.toUpperCase())
+    ];
 
-    // Disable Ctrl+A, Ctrl+S, Ctrl+U separately (more aggressive)
-    document.addEventListener("keydown", function (e) {
-      if (
-        (e.ctrlKey || e.metaKey) &&
-        ["a", "s", "u"].includes(e.key.toLowerCase())
-      ) {
-        e.preventDefault();
-      }
-    });
+    if (blockedKeys.includes(e.key) || blockedCombos.some(Boolean)) {
+      e.preventDefault();
+      return false;
+    }
+  });
 
-    // Disable page source drag/selection
-    document.addEventListener("selectstart", e => e.preventDefault());
-    document.addEventListener("dragstart", e => e.preventDefault());
-  </script>
+  // Disable Ctrl+A, Ctrl+S, Ctrl+U separately (extra layer)
+  document.addEventListener("keydown", function (e) {
+    if (
+      (e.ctrlKey || e.metaKey) &&
+      ["a", "s", "u"].includes(e.key.toLowerCase())
+    ) {
+      e.preventDefault();
+    }
+  });
+
+  // Disable text selection and drag
+  document.addEventListener("selectstart", e => e.preventDefault());
+  document.addEventListener("dragstart", e => e.preventDefault());
+</script>
 
 
 
