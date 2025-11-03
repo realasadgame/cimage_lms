@@ -1,0 +1,66 @@
+name: Deploy to Staging (EC2)
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch: {}
+
+concurrency:
+    group: main-deploy
+    cancel-in-progress: true
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Ensure backend folder permissions
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  script: |
+                      mkdir -p /home/${{ secrets.EC2_USER }}/devops_ws_8002
+                      sudo chown -R $USER:$USER /home/${{ secrets.EC2_USER }}/devops_ws_8002
+                      sudo chmod -R u+rwX /home/${{ secrets.EC2_USER }}/devops_ws_8002
+
+            - name: Upload project to EC2 (SCP)
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  source: .
+                  target: /home/${{ secrets.EC2_USER }}/devops_ws_8002
+                  overwrite: true
+
+            - name: Deploy on EC2
+              uses: appleboy/ssh-action@v1.0.3
+              env:
+                  APP_DIR: /home/${{ secrets.EC2_USER }}/devops_ws_8002
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  script_stop: true
+                  script: |
+                      cd /home/${{ secrets.EC2_USER }}/devops_ws_8002
+
+                      python3 -m venv .venv || true
+                      source .venv/bin/activate
+
+
+                      python -m pip install --upgrade pip
+                      pip install -r requirements.txt
+
+                      fuser -k 8002/tcp || true
+                      nohup python manage.py runserver 0.0.0.0:8002 > logs.out 2>&1 &
+                      echo "✅ Deployment complete and server restarted!"
+
