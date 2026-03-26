@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $address = clean_input($_POST['address']);
             
             $stmt = $conn->prepare("INSERT INTO students (student_id, first_name, last_name, email, password, phone, address, course, semester, enrollment_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssssi", $student_id, $first_name, $last_name, $email, $password, $phone, $address, $course, $semester, $enrollment_date);
+            $stmt->bind_param("sssssssis", $student_id, $first_name, $last_name, $email, $password, $phone, $address, $course, $semester, $enrollment_date);
             
             if ($stmt->execute()) {
                 $success = "Student added successfully!";
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $status = clean_input($_POST['status']);
             
             $stmt = $conn->prepare("UPDATE students SET first_name = ?, last_name = ?, email = ?, phone = ?, address = ?, course = ?, semester = ?, status = ? WHERE id = ?");
-            $stmt->bind_param("sssssssi", $first_name, $last_name, $email, $phone, $address, $course, $semester, $status, $id);
+            $stmt->bind_param("ssssssssi", $first_name, $last_name, $email, $phone, $address, $course, $semester, $status, $id);
             
             if ($stmt->execute()) {
                 $success = "Student updated successfully!";
