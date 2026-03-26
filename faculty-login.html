@@ -169,26 +169,6 @@
       to { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    .links-group {
-      margin-top: 1.5rem;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      gap: 1.25rem;
-    }
-
-    .links-group a {
-      text-decoration: none;
-      color: #2563eb;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: color 0.2s ease;
-    }
-
-    .links-group a:hover {
-      color: #1d4ed8;
-    }
-
     .back-link {
       display: block;
       text-align: center;
@@ -259,16 +239,11 @@
       <button type="submit" class="login-button"><span>Sign In</span></button>
     </form>
 
-    <div class="links-group">
-      <a href="faculty-recovery.html">Forgot Password?</a>
-      <a href="new-faculty.html">Register as New Faculty</a>
-    </div>
-
     <a href="index.html" class="back-link">← Back to Home</a>
   </div>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const facultyId = document.getElementById('facultyId').value.trim();
@@ -301,35 +276,34 @@
         return;
       }
 
-      // Check credentials
-      const isFacultyIdValid = facultyId === '444';
-      const isPasswordValid = password === 'cimagepatna';
+      try {
+        // Send login request to PHP backend
+        const formData = new FormData();
+        formData.append('faculty_id', facultyId);
+        formData.append('password', password);
 
-      if (isFacultyIdValid && isPasswordValid) {
-        try {
-          console.log('Attempting redirect to faculty.html');
+        const response = await fetch('api/faculty_login.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
           // Store faculty data in localStorage for dashboard
-          localStorage.setItem('facultyData', JSON.stringify({
-            name: 'Dr. John Doe',
-            id: facultyId,
-            email: 'john.doe@cimage.in',
-            contact: '9876543210'
-          }));
-          window.location.href = 'faculty.html';
-        } catch (err) {
-          console.error('Redirect failed:', err);
-          alert('Error redirecting to dashboard. Please try again.');
-          loginButton.classList.remove('loading');
-          loginButton.disabled = false;
-        }
-      } else {
-        if (!isFacultyIdValid) {
+          localStorage.setItem('facultyData', JSON.stringify(result.faculty_data));
+          console.log('Login successful, redirecting to faculty.html');
+          window.location.href = result.redirect;
+        } else {
+          // Show error message
+          alert(result.message);
           facultyIdGroup.classList.add('error');
-        }
-        if (!isPasswordValid) {
           passwordGroup.classList.add('error');
         }
-        alert('Invalid Faculty ID or Password');
+      } catch (error) {
+        console.error('Login error:', error);
+        alert('An error occurred during login. Please try again.');
+      } finally {
         loginButton.classList.remove('loading');
         loginButton.disabled = false;
       }

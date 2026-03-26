@@ -336,12 +336,12 @@
       <button class="edit-btn" onclick="window.location.href='edit-profile.html'">Edit Profile</button>
       <div class="profile-info">
         <h2>Welcome</h2>
-        <h3 id="studentName">Mohd Asad Alam</h3>
-        <p><strong>Student ID:</strong> <span id="studentID">445-11942</span></p>
-        <p><strong>Email:</strong> <span id="studentEmail">shaikhmdasad786@gmail.com</span></p>
-        <p><strong>DOB:</strong> <span id="studentDOB">21 March 2005</span></p>
-        <p><strong>Contact:</strong> <span id="studentContact">8779477539</span></p>
-        <p><strong>Address:</strong> <span id="studentAddress">4th floor Umang Enclave, Vikas, Fair Field Colony, Patna 800011</span></p>
+        <h3 id="studentName">Loading...</h3>
+        <p><strong>Student ID:</strong> <span id="studentID">Loading...</span></p>
+        <p><strong>Email:</strong> <span id="studentEmail">Loading...</span></p>
+        <p><strong>DOB:</strong> <span id="studentDOB">Loading...</span></p>
+        <p><strong>Contact:</strong> <span id="studentContact">Loading...</span></p>
+        <p><strong>Address:</strong> <span id="studentAddress">Loading...</span></p>
       </div>
     </div>
     <button class="logout-btn" onclick="logout()">Logout</button>
@@ -370,7 +370,11 @@
           <div class="card-icon"><i class="fas fa-question-circle"></i></div>
           <div class="card-title">Previous Year Questions</div>
         </div>
-        <div class="card-content">Practice with solved/unsolved past papers to enhance your preparation.</div>
+        <div class="card-content">Practice with solved/unsolved past papers to enhance your preparation. 
+          <a href="https://ppulearn.com/?dir=Previous%20Year%20Questions" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
+            Click here to view previous year questions →
+          </a>
+        </div>
       </div>
       <div class="card" onclick="window.location.href='discussion-forum.html'">
         <div class="card-header">
@@ -379,19 +383,29 @@
         </div>
         <div class="card-content">Engage in academic discussions and collaborate with classmates.</div>
       </div>
-      <div class="card" onclick="window.location.href='jobs.html'">
+      <div class="card">
         <div class="card-header">
           <div class="card-icon"><i class="fas fa-briefcase"></i></div>
           <div class="card-title">Apply for Jobs</div>
         </div>
-        <div class="card-content">Discover internship and job opportunities posted by the placement cell.</div>
+        <div class="card-content">
+          Discover internship and job opportunities posted by placement cell. 
+          <a href="https://whatsapp.com/channel/0029Va4iQfiLI8YbiFJiCK1V" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
+            Click here to join job updates →
+          </a>
+        </div>
       </div>
-      <div class="card" onclick="window.location.href='workshop.html'">
+      <div class="card">
         <div class="card-header">
           <div class="card-icon"><i class="fas fa-chalkboard-teacher"></i></div>
           <div class="card-title">Workshops</div>
         </div>
-        <div class="card-content">Register for technical and non-technical workshops and seminars.</div>
+        <div class="card-content">
+          Register for technical and non-technical workshops and seminars. 
+          <a href="https://addons.cimage.in/" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
+            Click here to view upcoming workshops →
+          </a>
+        </div>
       </div>
       <div class="card" onclick="window.location.href='timetable.html'">
         <div class="card-header">
@@ -448,12 +462,20 @@
     }
 
     function loadProfilePicture() {
-      const savedPic = localStorage.getItem("profilePicture");
-      if (savedPic) {
-        document.getElementById("profilePic").style.backgroundImage = `url(${savedPic})`;
+      const studentData = JSON.parse(localStorage.getItem("studentData"));
+      const profilePic = document.getElementById("profilePic");
+      
+      if (studentData && studentData.profile_picture) {
+        // Load from database (login data)
+        profilePic.style.backgroundImage = `url(${studentData.profile_picture})`;
+      } else if (localStorage.getItem("profilePicture")) {
+        // Fallback to localStorage
+        profilePic.style.backgroundImage = `url(${localStorage.getItem("profilePicture")})`;
       } else {
-        document.getElementById("profilePic").style.backgroundImage = "url('https://cdn1.iconfinder.com/data/icons/language-studies-thick-outline/33/language-10-1024.png')"; // Updated default image
+        // Default image
+        profilePic.style.backgroundImage = "url('https://cdn1.iconfinder.com/data/icons/language-studies-thick-outline/33/language-10-1024.png')";
       }
+      
       handleProfilePicture();
     }
 
@@ -468,23 +490,42 @@
     }
 
     function loadProfileData() {
-      const profileData = JSON.parse(localStorage.getItem("profileData")) || {
-        name: "Mohd Asad Alam",
-        id: "445-11942",
-        email: "shaikhmdasad786@gmail.com",
-        dob: "2005-03-21",
-        contact: "8779477539",
-        address: "4th floor Umang Enclave, Vikas, Fair Field Colony, Patna 800011",
-      };
-      document.getElementById("studentName").textContent = profileData.name;
-      document.getElementById("studentID").textContent = profileData.id;
-      document.getElementById("studentEmail").textContent = profileData.email;
-      document.getElementById("studentDOB").textContent = formatDateForDisplay(profileData.dob);
-      document.getElementById("studentContact").textContent = profileData.contact;
-      document.getElementById("studentAddress").textContent = profileData.address;
+      // Get student data from login (stored in localStorage as studentData)
+      const studentData = JSON.parse(localStorage.getItem("studentData"));
+      
+      if (studentData) {
+        // Use actual logged-in student data
+        document.getElementById("studentName").textContent = studentData.name;
+        document.getElementById("studentID").textContent = studentData.student_id;
+        document.getElementById("studentEmail").textContent = studentData.email;
+        document.getElementById("studentContact").textContent = studentData.phone || "Not provided";
+        document.getElementById("studentAddress").textContent = studentData.address || "Not provided";
+        
+        // Load additional profile data if exists (for DOB which is not in login data)
+        const profileData = JSON.parse(localStorage.getItem("profileData")) || {};
+        document.getElementById("studentDOB").textContent = formatDateForDisplay(profileData.dob || "2000-01-01");
+      } else {
+        // Fallback to default data if no login data found
+        const defaultProfileData = {
+          name: "Guest Student",
+          id: "N/A",
+          email: "not@logged.in",
+          dob: "2000-01-01",
+          contact: "Not provided",
+          address: "Not provided",
+        };
+        document.getElementById("studentName").textContent = defaultProfileData.name;
+        document.getElementById("studentID").textContent = defaultProfileData.id;
+        document.getElementById("studentEmail").textContent = defaultProfileData.email;
+        document.getElementById("studentDOB").textContent = formatDateForDisplay(defaultProfileData.dob);
+        document.getElementById("studentContact").textContent = defaultProfileData.contact;
+        document.getElementById("studentAddress").textContent = defaultProfileData.address;
+      }
     }
 
     function logout() {
+      // Clear all login and profile data
+      localStorage.removeItem("studentData"); // Clear login data
       localStorage.removeItem("profileData");
       localStorage.removeItem("profilePicture");
       localStorage.removeItem("assignments");

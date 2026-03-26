@@ -277,12 +277,12 @@
       <button class="edit-btn" onclick="window.location.href='edit-faculty-profile.html'">Edit Profile</button>
       <div class="profile-info">
         <h2>Welcome</h2>
-        <h3 id="facultyName">Dr. John Doe</h3>
-        <p><strong>Faculty ID:</strong> <span id="facultyID">FAC-12345</span></p>
-        <p><strong>Email:</strong> <span id="facultyEmail">john.doe@cimage.in</span></p>
-        <p><strong>Contact:</strong> <span id="facultyContact">9876543210</span></p>
-        <p><strong>Department:</strong> <span id="facultyDept">Computer Science</span></p>
-        <p><strong>Designation:</strong> <span id="facultyDesig">Assistant Professor</span></p>
+        <h3 id="facultyName">Loading...</h3>
+        <p><strong>Faculty ID:</strong> <span id="facultyID">Loading...</span></p>
+        <p><strong>Email:</strong> <span id="facultyEmail">Loading...</span></p>
+        <p><strong>Contact:</strong> <span id="facultyContact">Loading...</span></p>
+        <p><strong>Department:</strong> <span id="facultyDept">Loading...</span></p>
+        <p><strong>Designation:</strong> <span id="facultyDesig">Loading...</span></p>
       </div>
     </div>
     <button class="logout-btn" onclick="logout()">Logout</button>
@@ -340,12 +340,17 @@
         </div>
         <div class="card-content">Moderate and participate in academic discussions.</div>
       </div>
-      <div class="card" tabindex="0" onclick="navigateTo('faculty-events.html')">
+      <div class="card" tabindex="0">
         <div class="card-header">
           <div class="card-icon"><i class="fas fa-microphone"></i></div>
           <div class="card-title">Workshops & Events</div>
         </div>
-        <div class="card-content">Schedule and manage events and workshops.</div>
+        <div class="card-content">
+          Schedule and manage events and workshops. 
+          <a href="https://addons.cimage.in/workshops" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
+            Click here to manage workshops →
+          </a>
+        </div>
       </div>
       <div class="card" tabindex="0" onclick="navigateTo('faculty-messages.html')">
         <div class="card-header">
@@ -364,44 +369,72 @@
       loadProfilePicture();
     });
     function loadFacultyProfile() {
-      const profileData = JSON.parse(localStorage.getItem('facultyProfile')) || {
-        name: 'Dr. John Doe',
-        id: 'FAC-12345',
-        email: 'john.doe@cimage.in',
-        contact: '9876543210',
-        department: 'Computer Science',
-        designation: 'Assistant Professor'
-      };
-      document.getElementById('facultyName').textContent = profileData.name;
-      document.getElementById('facultyID').textContent = profileData.id;
-      document.getElementById('facultyEmail').textContent = profileData.email;
-      document.getElementById('facultyContact').textContent = profileData.contact;
-      document.getElementById('facultyDept').textContent = profileData.department;
-      document.getElementById('facultyDesig').textContent = profileData.designation;
+      // Get faculty data from login (stored in localStorage as facultyData)
+      const facultyData = JSON.parse(localStorage.getItem("facultyData"));
+      
+      if (facultyData) {
+        // Use actual logged-in faculty data
+        document.getElementById('facultyName').textContent = facultyData.name;
+        document.getElementById('facultyID').textContent = facultyData.faculty_id;
+        document.getElementById('facultyEmail').textContent = facultyData.email;
+        document.getElementById('facultyContact').textContent = facultyData.phone || 'Not provided';
+        document.getElementById('facultyDept').textContent = facultyData.department;
+        document.getElementById('facultyDesig').textContent = facultyData.designation;
+      } else {
+        // Fallback to default data if no login data found
+        const defaultProfileData = {
+          name: 'Guest Faculty',
+          id: 'N/A',
+          email: 'not@logged.in',
+          contact: 'Not provided',
+          department: 'Not specified',
+          designation: 'Not specified'
+        };
+        document.getElementById('facultyName').textContent = defaultProfileData.name;
+        document.getElementById('facultyID').textContent = defaultProfileData.id;
+        document.getElementById('facultyEmail').textContent = defaultProfileData.email;
+        document.getElementById('facultyContact').textContent = defaultProfileData.contact;
+        document.getElementById('facultyDept').textContent = defaultProfileData.department;
+        document.getElementById('facultyDesig').textContent = defaultProfileData.designation;
+      }
     }
     function loadProfilePicture() {
-      const savedPic = localStorage.getItem('facultyProfilePicture');
-      const profilePic = document.getElementById('profilePic');
-      if (savedPic) {
-        profilePic.style.backgroundImage = `url(${savedPic})`;
+      const facultyData = JSON.parse(localStorage.getItem("facultyData"));
+      const profilePic = document.getElementById("profilePic");
+      
+      if (facultyData && facultyData.profile_picture) {
+        // Load from database (login data)
+        profilePic.style.backgroundImage = `url(${facultyData.profile_picture})`;
+      } else if (localStorage.getItem("facultyProfilePicture")) {
+        // Fallback to localStorage
+        profilePic.style.backgroundImage = `url(${localStorage.getItem("facultyProfilePicture")})`;
       } else {
+        // Default image
         profilePic.style.backgroundImage = "url('https://cdn1.iconfinder.com/data/icons/language-studies-thick-outline/33/language-10-1024.png')";
       }
-      const picInput = document.getElementById('picInput');
-      picInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            profilePic.style.backgroundImage = `url(${e.target.result})`;
-            localStorage.setItem('facultyProfilePicture', e.target.result);
-            showToast('Profile picture updated successfully!');
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+      
+      const picInput = document.getElementById("picInput");
+      if (picInput) {
+        picInput.removeEventListener("change", handlePicChange);
+        picInput.addEventListener("change", handlePicChange);
+      }
+    }
+    function handlePicChange(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const profilePic = document.getElementById("profilePic");
+          profilePic.style.backgroundImage = `url(${e.target.result})`;
+          localStorage.setItem('facultyProfilePicture', e.target.result);
+          showToast('Profile picture updated successfully!');
+        };
+        reader.readAsDataURL(file);
+      }
     }
     function logout() {
+      // Clear all login and profile data
+      localStorage.removeItem("facultyData"); // Clear login data
       localStorage.removeItem('facultyProfile');
       localStorage.removeItem('facultyProfilePicture');
       showToast('Logged out successfully!');

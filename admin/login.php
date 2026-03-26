@@ -1,9 +1,48 @@
+<?php
+require_once '../config.php';
+
+// Handle login submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = clean_input($_POST['username']);
+    $password = $_POST['password'];
+    
+    // Validate input
+    if (empty($username) || empty($password)) {
+        $error = "Please enter both username and password";
+    } else {
+        // Check admin credentials
+        $stmt = $conn->prepare("SELECT * FROM admins WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows === 1) {
+            $admin = $result->fetch_assoc();
+            
+            if (verify_password($password, $admin['password'])) {
+                // Set session variables
+                $_SESSION['user_id'] = $admin['id'];
+                $_SESSION['user_type'] = 'admin';
+                $_SESSION['user_data'] = $admin;
+                
+                redirect('index.php');
+            } else {
+                $error = "Invalid password";
+            }
+        } else {
+            $error = "Invalid username";
+        }
+        $stmt->close();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - CIMAGE College LMS</title>
+    <title>Admin Login - CIMAGE LMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -103,18 +142,17 @@
             color: #3498db;
         }
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            color: #6b7280;
+        .alert {
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
             font-size: 0.9rem;
         }
 
-        .remember-me input[type="checkbox"] {
-            width: auto;
-            padding: 0;
+        .alert-danger {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
         }
 
         .login-button {
@@ -138,24 +176,6 @@
 
         .login-button:active {
             transform: translateY(0);
-        }
-
-        .auth-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #6b7280;
-            font-size: 0.9rem;
-        }
-
-        .auth-link a {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .auth-link a:hover {
-            color: #2980b9;
-            text-decoration: underline;
         }
 
         .back-link {
@@ -188,30 +208,33 @@
             <h1>Admin Login</h1>
             <p>Access CIMAGE LMS Admin Panel</p>
         </div>
-        
-        <form class="login-form" action="admin/login.php" method="POST">
+
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
+
+        <form method="POST">
             <div class="form-group">
                 <label for="username">Username</label>
                 <i class="fas fa-user"></i>
-                <input type="text" id="username" name="username" required placeholder="Enter your username">
+                <input type="text" id="username" name="username" required 
+                       placeholder="Enter your username" 
+                       value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>">
             </div>
-            
+
             <div class="form-group">
                 <label for="password">Password</label>
                 <i class="fas fa-lock"></i>
-                <input type="password" id="password" name="password" required placeholder="Enter your password">
+                <input type="password" id="password" name="password" required 
+                       placeholder="Enter your password">
             </div>
-            
-            <div class="remember-me">
-                <input type="checkbox" name="remember-me" id="remember-me">
-                <label for="remember-me">Remember me</label>
-            </div>
-            
+
             <button type="submit" class="login-button">Sign In</button>
         </form>
-        
-        <p class="auth-link">Forgot password? <a href="#">Contact Administrator</a></p>
-        <a href="index.html" class="back-link">← Back to Home</a>
+
+        <a href="../index.html" class="back-link">← Back to Home</a>
     </div>
 </body>
 </html>
