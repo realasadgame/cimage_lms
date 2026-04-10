@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $joining_date = $_POST['joining_date'];
             
             $stmt = $conn->prepare("INSERT INTO faculty (faculty_id, first_name, last_name, email, password, phone, address, department, designation, specialization, joining_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssssssss", $faculty_id, $first_name, $last_name, $email, $password, $phone, $address, $department, $designation, $specialization, $joining_date);
+            $stmt->bind_param("sssssssssss", $faculty_id, $first_name, $last_name, $email, $password, $phone, $address, $department, $designation, $specialization, $joining_date);
             
             if ($stmt->execute()) {
                 $success = "Faculty added successfully!";
@@ -309,6 +309,8 @@ $faculty = $conn->query("SELECT * FROM faculty ORDER BY created_at DESC");
             border-radius: 10px;
             width: 90%;
             max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-header {
@@ -316,6 +318,34 @@ $faculty = $conn->query("SELECT * FROM faculty ORDER BY created_at DESC");
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
         }
 
         .modal-header h3 {

@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $address = clean_input($_POST['address']);
             
             $stmt = $conn->prepare("INSERT INTO students (student_id, first_name, last_name, email, password, phone, address, course, semester, enrollment_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssssis", $student_id, $first_name, $last_name, $email, $password, $phone, $address, $course, $semester, $enrollment_date);
+            $stmt->bind_param("ssssssssis", $student_id, $first_name, $last_name, $email, $password, $phone, $address, $course, $semester, $enrollment_date);
             
             if ($stmt->execute()) {
                 $success = "Student added successfully!";
@@ -274,19 +274,28 @@ $students = $conn->query("SELECT * FROM students ORDER BY created_at DESC");
         }
 
         .badge-success {
-            background: #d4edda;
-            color: #155724;
+            background: #d4edda !important;
+            color: #155724 !important;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
         }
 
         .badge-warning {
-            background: #ffc107;
-            color: #212529;
+            background: #ffc107 !important;
+            color: #212529 !important;
             font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
         }
 
         .badge-danger {
-            background: #f8d7da;
-            color: #721c24;
+            background: #f8d7da !important;
+            color: #721c24 !important;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
         }
 
         .actions {
@@ -456,7 +465,10 @@ $students = $conn->query("SELECT * FROM students ORDER BY created_at DESC");
                                     <span class="badge <?php 
                                         echo $student['status'] == 'active' ? 'badge-success' : 
                                              ($student['status'] == 'inactive' ? 'badge-warning' : 'badge-danger'); 
-                                    ?>">
+                                    ?>" style="<?php 
+                                        echo $student['status'] == 'active' ? 'background: #d4edda !important; color: #155724 !important;' : 
+                                             ($student['status'] == 'inactive' ? 'background: #ffc107 !important; color: #212529 !important; font-weight: 600;' : 'background: #f8d7da !important; color: #721c24 !important;'); 
+                                        ?> padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
                                         <?php echo htmlspecialchars($student['status']); ?>
                                     </span>
                                 </td>

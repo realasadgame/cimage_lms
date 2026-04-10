@@ -255,6 +255,9 @@ $recent_faculty = $conn->query("SELECT * FROM faculty ORDER BY created_at DESC L
                 <a href="faculty.php" class="menu-item">
                     <i class="fas fa-chalkboard-teacher"></i> Faculty
                 </a>
+                <a href="reports.php" class="menu-item">
+                    <i class="fas fa-file-download"></i> Reports
+                </a>
                 <a href="logout.php" class="menu-item">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Timetable - Faculty Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f7fb;
+            color: #1a2a44;
+            margin: 0;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(30,58,138,0.08);
+            padding: 2rem;
+        }
+        
+        h1 {
+            color: #2563eb;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102,126,234,0.1);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40,167,69,0.1);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #ef4444 100%);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220,53,69,0.1);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #feca57 100%);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245,158,11,0.1);
+        }
+        
+        .timetable-grid {
+            display: grid;
+            grid-template-columns: 80px repeat(6, 1fr);
+            gap: 1px;
+            background: #e5e7eb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+        
+        .timetable-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .time-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            font-weight: 600;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        
+        .timetable-cell {
+            background: white;
+            padding: 0.5rem;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .timetable-cell:hover {
+            background: #f0f9ff;
+            transform: scale(1.02);
+            z-index: 10;
+        }
+        
+        .timetable-cell.occupied {
+            background: #e8f5e8;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+        
+        .timetable-cell.occupied:hover {
+            background: #f3e8ff;
+        }
+        
+        .subject-name {
+            font-weight: 600;
+            color: #2563eb;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .room-number {
+            font-size: 0.75rem;
+            color: #6b7280;
+            background: #f3f4f6;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .empty-cell {
+            color: #9ca3af;
+            font-size: 0.75rem;
+            font-style: italic;
+        }
+        
+        .message {
+            background: #d1ecf1;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .default-schedule {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .default-schedule h3 {
+            color: #2563eb;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .timetable-grid {
+                grid-template-columns: 60px repeat(6, 1fr);
+                gap: 0.5px;
+            }
+            
+            .timetable-header, .time-header {
+                padding: 0.5rem 0.25rem;
+                font-size: 0.75rem;
+            }
+            
+            .timetable-cell {
+                padding: 0.25rem;
+                min-height: 50px;
+            }
+            
+            .subject-name {
+                font-size: 0.75rem;
+            }
+            
+            .room-number {
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-calendar-alt"></i> Faculty Timetable</h1>
+        
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="loadDefaultSchedule()">
+                <i class="fas fa-clock"></i> Load Default Schedule
+            </button>
+            <button class="btn btn-success" onclick="saveTimetable()">
+                <i class="fas fa-save"></i> Save Timetable
+            </button>
+            <button class="btn btn-danger" onclick="clearTimetable()">
+                <i class="fas fa-trash"></i> Clear All
+            </button>
+            <button class="btn btn-warning" onclick="window.location.href='faculty.html'">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
+        </div>
+        
+        <div id="message"></div>
+        
+        <div class="default-schedule">
+            <h3><i class="fas fa-info-circle"></i> Default Schedule Template</h3>
+            <p><strong>Timing:</strong> 8:00 AM - 6:00 PM</p>
+            <p><strong>Classes:</strong> 5 classes per hour</p>
+            <p><strong>Subjects:</strong> Python Programming, Networking, Database Management, Web Development, Data Structures</p>
+        </div>
+        
+        <div class="timetable-grid">
+            <!-- Header Row -->
+            <div class="time-header">Time</div>
+            <div class="timetable-header">Monday</div>
+            <div class="timetable-header">Tuesday</div>
+            <div class="timetable-header">Wednesday</div>
+            <div class="timetable-header">Thursday</div>
+            <div class="timetable-header">Friday</div>
+            
+            <!-- 8:00 AM Slot -->
+            <div class="time-header">8:00-9:00</div>
+            <div class="timetable-cell" onclick="editCell('monday', '8:00-9:00')">
+                <div class="subject-name">Python Programming</div>
+                <div class="room-number">Lab 101</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('tuesday', '8:00-9:00')">
+                <div class="subject-name">Networking</div>
+                <div class="room-number">Lab 102</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('wednesday', '8:00-9:00')">
+                <div class="subject-name">Database Management</div>
+                <div class="room-number">Lab 103</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('thursday', '8:00-9:00')">
+                <div class="subject-name">Web Development</div>
+                <div class="room-number">Lab 104</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('friday', '8:00-9:00')">
+                <div class="subject-name">Data Structures</div>
+                <div class="room-number">Lab 105</div>
+            </div>
+            
+            <!-- 9:00 AM Slot -->
+            <div class="time-header">9:00-10:00</div>
+            <div class="timetable-cell" onclick="editCell('monday', '9:00-10:00')">
+                <div class="subject-name">Networking</div>
+                <div class="room-number">Lab 102</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('tuesday', '9:00-10:00')">
+                <div class="subject-name">Database Management</div>
+                <div class="room-number">Lab 103</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('wednesday', '9:00-10:00')">
+                <div class="subject-name">Web Development</div>
+                <div class="room-number">Lab 104</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('thursday', '9:00-10:00')">
+                <div class="subject-name">Data Structures</div>
+                <div class="room-number">Lab 105</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('friday', '9:00-10:00')">
+                <div class="subject-name">Python Programming</div>
+                <div class="room-number">Lab 101</div>
+            </div>
+            
+            <!-- 10:00 AM Slot -->
+            <div class="time-header">10:00-11:00</div>
+            <div class="timetable-cell" onclick="editCell('monday', '10:00-11:00')">
+                <div class="subject-name">Database Management</div>
+                <div class="room-number">Lab 103</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('tuesday', '10:00-11:00')">
+                <div class="subject-name">Web Development</div>
+                <div class="room-number">Lab 104</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('wednesday', '10:00-11:00')">
+                <div class="subject-name">Data Structures</div>
+                <div class="room-number">Lab 105</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('thursday', '10:00-11:00')">
+                <div class="subject-name">Python Programming</div>
+                <div class="room-number">Lab 101</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('friday', '10:00-11:00')">
+                <div class="subject-name">Networking</div>
+                <div class="room-number">Lab 102</div>
+            </div>
+            
+            <!-- 11:00 AM Slot -->
+            <div class="time-header">11:00-12:00</div>
+            <div class="timetable-cell" onclick="editCell('monday', '11:00-12:00')">
+                <div class="subject-name">Web Development</div>
+                <div class="room-number">Lab 104</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('tuesday', '11:00-12:00')">
+                <div class="subject-name">Data Structures</div>
+                <div class="room-number">Lab 105</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('wednesday', '11:00-12:00')">
+                <div class="subject-name">Python Programming</div>
+                <div class="room-number">Lab 101</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('thursday', '11:00-12:00')">
+                <div class="subject-name">Networking</div>
+                <div class="room-number">Lab 102</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('friday', '11:00-12:00')">
+                <div class="subject-name">Database Management</div>
+                <div class="room-number">Lab 103</div>
+            </div>
+            
+            <!-- 12:00 PM Slot -->
+            <div class="time-header">12:00-1:00</div>
+            <div class="timetable-cell" onclick="editCell('monday', '12:00-1:00')">
+                <div class="subject-name">Lunch Break</div>
+                <div class="room-number">-</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('tuesday', '12:00-1:00')">
+                <div class="subject-name">Lunch Break</div>
+                <div class="room-number">-</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('wednesday', '12:00-1:00')">
+                <div class="subject-name">Lunch Break</div>
+                <div class="room-number">-</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('thursday', '12:00-1:00')">
+                <div class="subject-name">Lunch Break</div>
+                <div class="room-number">-</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('friday', '12:00-1:00')">
+                <div class="subject-name">Lunch Break</div>
+                <div class="room-number">-</div>
+            </div>
+            
+            <!-- 1:00 PM Slot -->
+            <div class="time-header">1:00-2:00</div>
+            <div class="timetable-cell" onclick="editCell('monday', '1:00-2:00')">
+                <div class="subject-name">Data Structures</div>
+                <div class="room-number">Lab 105</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('tuesday', '1:00-2:00')">
+                <div class="subject-name">Python Programming</div>
+                <div class="room-number">Lab 101</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('wednesday', '1:00-2:00')">
+                <div class="subject-name">Networking</div>
+                <div class="room-number">Lab 102</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('thursday', '1:00-2:00')">
+                <div class="subject-name">Database Management</div>
+                <div class="room-number">Lab 103</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('friday', '1:00-2:00')">
+                <div class="subject-name">Web Development</div>
+                <div class="room-number">Lab 104</div>
+            </div>
+            
+            <!-- 2:00 PM Slot -->
+            <div class="time-header">2:00-3:00</div>
+            <div class="timetable-cell" onclick="editCell('monday', '2:00-3:00')">
+                <div class="subject-name">Python Programming</div>
+                <div class="room-number">Lab 101</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('tuesday', '2:00-3:00')">
+                <div class="subject-name">Networking</div>
+                <div class="room-number">Lab 102</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('wednesday', '2:00-3:00')">
+                <div class="subject-name">Database Management</div>
+                <div class="room-number">Lab 103</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('thursday', '2:00-3:00')">
+                <div class="subject-name">Web Development</div>
+                <div class="room-number">Lab 104</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('friday', '2:00-3:00')">
+                <div class="subject-name">Data Structures</div>
+                <div class="room-number">Lab 105</div>
+            </div>
+            
+            <!-- 3:00 PM Slot -->
+            <div class="time-header">3:00-4:00</div>
+            <div class="timetable-cell" onclick="editCell('monday', '3:00-4:00')">
+                <div class="subject-name">Networking</div>
+                <div class="room-number">Lab 102</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('tuesday', '3:00-4:00')">
+                <div class="subject-name">Database Management</div>
+                <div class="room-number">Lab 103</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('wednesday', '3:00-4:00')">
+                <div class="subject-name">Web Development</div>
+                <div class="room-number">Lab 104</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('thursday', '3:00-4:00')">
+                <div class="subject-name">Data Structures</div>
+                <div class="room-number">Lab 105</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('friday', '3:00-4:00')">
+                <div class="subject-name">Python Programming</div>
+                <div class="room-number">Lab 101</div>
+            </div>
+            
+            <!-- 4:00 PM Slot -->
+            <div class="time-header">4:00-5:00</div>
+            <div class="timetable-cell" onclick="editCell('monday', '4:00-5:00')">
+                <div class="subject-name">Database Management</div>
+                <div class="room-number">Lab 103</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('tuesday', '4:00-5:00')">
+                <div class="subject-name">Web Development</div>
+                <div class="room-number">Lab 104</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('wednesday', '4:00-5:00')">
+                <div class="subject-name">Data Structures</div>
+                <div class="room-number">Lab 105</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('thursday', '4:00-5:00')">
+                <div class="subject-name">Python Programming</div>
+                <div class="room-number">Lab 101</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('friday', '4:00-5:00')">
+                <div class="subject-name">Networking</div>
+                <div class="room-number">Lab 102</div>
+            </div>
+            
+            <!-- 5:00 PM Slot -->
+            <div class="time-header">5:00-6:00</div>
+            <div class="timetable-cell" onclick="editCell('monday', '5:00-6:00')">
+                <div class="subject-name">Web Development</div>
+                <div class="room-number">Lab 104</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('tuesday', '5:00-6:00')">
+                <div class="subject-name">Data Structures</div>
+                <div class="room-number">Lab 105</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('wednesday', '5:00-6:00')">
+                <div class="subject-name">Python Programming</div>
+                <div class="room-number">Lab 101</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('thursday', '5:00-6:00')">
+                <div class="subject-name">Networking</div>
+                <div class="room-number">Lab 102</div>
+            </div>
+            <div class="timetable-cell" onclick="editCell('friday', '5:00-6:00')">
+                <div class="subject-name">Database Management</div>
+                <div class="room-number">Lab 103</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let timetable = {};
+        
+        // Default schedule data
+        const defaultSchedule = {
+            'monday': {
+                '8:00-9:00': { subject: 'Python Programming', room: 'Lab 101' },
+                '9:00-10:00': { subject: 'Networking', room: 'Lab 102' },
+                '10:00-11:00': { subject: 'Database Management', room: 'Lab 103' },
+                '11:00-12:00': { subject: 'Web Development', room: 'Lab 104' },
+                '12:00-1:00': { subject: 'Lunch Break', room: '-' },
+                '1:00-2:00': { subject: 'Data Structures', room: 'Lab 105' },
+                '2:00-3:00': { subject: 'Python Programming', room: 'Lab 101' },
+                '3:00-4:00': { subject: 'Networking', room: 'Lab 102' },
+                '4:00-5:00': { subject: 'Database Management', room: 'Lab 103' },
+                '5:00-6:00': { subject: 'Web Development', room: 'Lab 104' }
+            },
+            'tuesday': {
+                '8:00-9:00': { subject: 'Networking', room: 'Lab 102' },
+                '9:00-10:00': { subject: 'Database Management', room: 'Lab 103' },
+                '10:00-11:00': { subject: 'Web Development', room: 'Lab 104' },
+                '11:00-12:00': { subject: 'Data Structures', room: 'Lab 105' },
+                '12:00-1:00': { subject: 'Lunch Break', room: '-' },
+                '1:00-2:00': { subject: 'Python Programming', room: 'Lab 101' },
+                '2:00-3:00': { subject: 'Networking', room: 'Lab 102' },
+                '3:00-4:00': { subject: 'Database Management', room: 'Lab 103' },
+                '4:00-5:00': { subject: 'Web Development', room: 'Lab 104' },
+                '5:00-6:00': { subject: 'Data Structures', room: 'Lab 105' }
+            },
+            'wednesday': {
+                '8:00-9:00': { subject: 'Database Management', room: 'Lab 103' },
+                '9:00-10:00': { subject: 'Web Development', room: 'Lab 104' },
+                '10:00-11:00': { subject: 'Data Structures', room: 'Lab 105' },
+                '11:00-12:00': { subject: 'Python Programming', room: 'Lab 101' },
+                '12:00-1:00': { subject: 'Lunch Break', room: '-' },
+                '1:00-2:00': { subject: 'Networking', room: 'Lab 102' },
+                '2:00-3:00': { subject: 'Database Management', room: 'Lab 103' },
+                '3:00-4:00': { subject: 'Web Development', room: 'Lab 104' },
+                '4:00-5:00': { subject: 'Data Structures', room: 'Lab 105' },
+                '5:00-6:00': { subject: 'Python Programming', room: 'Lab 101' }
+            },
+            'thursday': {
+                '8:00-9:00': { subject: 'Web Development', room: 'Lab 104' },
+                '9:00-10:00': { subject: 'Data Structures', room: 'Lab 105' },
+                '10:00-11:00': { subject: 'Python Programming', room: 'Lab 101' },
+                '11:00-12:00': { subject: 'Networking', room: 'Lab 102' },
+                '12:00-1:00': { subject: 'Lunch Break', room: '-' },
+                '1:00-2:00': { subject: 'Database Management', room: 'Lab 103' },
+                '2:00-3:00': { subject: 'Web Development', room: 'Lab 104' },
+                '3:00-4:00': { subject: 'Data Structures', room: 'Lab 105' },
+                '4:00-5:00': { subject: 'Python Programming', room: 'Lab 101' },
+                '5:00-6:00': { subject: 'Networking', room: 'Lab 102' }
+            },
+            'friday': {
+                '8:00-9:00': { subject: 'Data Structures', room: 'Lab 105' },
+                '9:00-10:00': { subject: 'Python Programming', room: 'Lab 101' },
+                '10:00-11:00': { subject: 'Networking', room: 'Lab 102' },
+                '11:00-12:00': { subject: 'Database Management', room: 'Lab 103' },
+                '12:00-1:00': { subject: 'Lunch Break', room: '-' },
+                '1:00-2:00': { subject: 'Web Development', room: 'Lab 104' },
+                '2:00-3:00': { subject: 'Data Structures', room: 'Lab 105' },
+                '3:00-4:00': { subject: 'Python Programming', room: 'Lab 101' },
+                '4:00-5:00': { subject: 'Networking', room: 'Lab 102' },
+                '5:00-6:00': { subject: 'Database Management', room: 'Lab 103' }
+            }
+        };
+        
+        // Load default schedule
+        function loadDefaultSchedule() {
+            timetable = JSON.parse(JSON.stringify(defaultSchedule));
+            renderTimetable();
+            saveTimetable();
+            showMessage('Default schedule loaded successfully!', 'success');
+        }
+        
+        // Load existing timetable
+        function loadTimetable() {
+            const savedTimetable = localStorage.getItem('facultyTimetable');
+            if (savedTimetable) {
+                timetable = JSON.parse(savedTimetable);
+                renderTimetable();
+            } else {
+                loadDefaultSchedule();
+            }
+        }
+        
+        // Edit cell
+        function editCell(day, time) {
+            const currentSlot = timetable[day] && timetable[day][time] ? timetable[day][time] : { subject: '', room: '' };
+            
+            const newSubject = prompt('Enter subject:', currentSlot.subject);
+            if (newSubject === null) return;
+            
+            const newRoom = prompt('Enter room:', currentSlot.room);
+            if (newRoom === null) return;
+            
+            if (!timetable[day]) {
+                timetable[day] = {};
+            }
+            
+            timetable[day][time] = {
+                subject: newSubject,
+                room: newRoom
+            };
+            
+            renderTimetable();
+            saveTimetable();
+            showMessage('Schedule updated successfully!', 'success');
+        }
+        
+        // Save timetable
+        function saveTimetable() {
+            localStorage.setItem('facultyTimetable', JSON.stringify(timetable));
+            showMessage('Timetable saved successfully!', 'success');
+        }
+        
+        // Clear timetable
+        function clearTimetable() {
+            if (confirm('Are you sure you want to clear all schedules?')) {
+                timetable = {};
+                renderTimetable();
+                saveTimetable();
+                showMessage('Timetable cleared successfully!', 'success');
+            }
+        }
+        
+        // Show message
+        function showMessage(text, type = 'info') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="message ${type}-message">${text}</div>`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTimetable();
+        });
+    </script>
+</body>
+</html>
